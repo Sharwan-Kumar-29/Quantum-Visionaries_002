@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <link rel="stylesheet" href="./signIn.css">
+</head>
+
+<body>
+    <main>
+        <div class="form-container signin-div">
+            <h1>Login</h1>
+            <form id="signin-form">
+                <div>
+                    <input type="email" id="signin-email" placeholder="email">
+                </div>
+                <div>
+                    <input type="password" id="signin-password" placeholder="password">
+                </div>
+                <!-- <p>forgot password</p> -->
+                <input type="submit" value="Login">
+                <span class="option-text">Don't have an account -<label for="sign-option">&nbsp; Sign up</label></span>
+
+                <input type="checkbox" id="sign-option" checked>
+                
+            </form>
+        </div>
+        <div class="form-container signup-div">
+            <h1>SignUp</h1>
+            <form id="signup-form">
+                <!-- <div>
+                    <label for="username">Username: </label>
+                    <input type="text" id="username" placeholder="username">
+                </div> -->
+                <div>
+                    <input type="email" id="signup-email" placeholder="abc@example.com">
+                </div>
+                <div>
+                    <input type="password" id="signup-password" placeholder="password (atleast 6 characters)" minlength=6>
+                </div>
+                <input type="submit" value="Signup">
+                <div>
+                    <span class="option-text">Already have an account -
+                        <label for="sign-option">&nbsp;Login</label></apan>
+                </div>
+                
+            </form>
+        </div>
+    </main>
+</body>
+
+</html>
+<script src="./signIn.js"></script>
+<script src="./signup.js"></script>
+<script>
+    let signupBox = document.querySelector(".signup-div")
+    let signinBox = document.querySelector(".signin-div")
+    let signCheckbox = document.getElementById("sign-option")
+
+    // form change signup and signin 
+    signCheckbox.addEventListener("change", () => {
+        if (signCheckbox.checked) {
+            signupBox.style.display = "none";
+            signinBox.style.display = "block";
+        }
+        else {
+            signinBox.style.display = "none";
+            signupBox.style.display = "block";
+        }
+    })
+</script>
