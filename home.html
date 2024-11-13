@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page for whiteboard</title>
+    <link rel="stylesheet" href="./styles.css">
+    
+</head>
+<body>
+    <div class="toolbar">
+        <!-- Toolbar with drawing options and controls -->
+        <button onclick="setMode('pen')">Pen</button>
+        <button onclick="setMode('eraser')">Eraser</button>
+        <button onclick="setMode('line')">Line</button>
+        <button onclick="setMode('circle')">Circle</button>
+        <button onclick="setMode('rectangle')">Rectangle</button>
+        <button onclick="setMode('arrow')">Arrow</button>
+        <button onclick="setMode('ellipse')">Ellipse</button>
+        <button onclick="setMode('text')">Text</button>
+        <button onclick="clearCanvas()">Clear</button>
+        <button onclick="undo()">Undo</button>
+        <button onclick="redo()">Redo</button>
+        <button onclick="saveToFirebase()">Save to Firebase</button>
+        <button onclick="loadSavedFiles()">Load from Firebase</button>
+        <input type="color" id="colorPicker" onchange="setColor(this.value)">
+        <input type="range" min="1" max="10" value="2" id="brushSize" onchange="setBrushSize(this.value)">
+    </div>
+
+    <div class="container">
+        <!-- Whiteboard and Notes area -->
+        <canvas id="whiteboard"></canvas>
+        <textarea id="notes" placeholder="Write your notes here..."></textarea>
+        <div class="saved-files" id="savedFiles">
+            <h3>Saved Files</h3>
+        </div>
+        <div class="saved-notes" id="savedNotes">
+            <h3>Saved Notes</h3>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    
+</body>
+</html>
