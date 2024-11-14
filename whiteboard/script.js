@@ -1,6 +1,7 @@
 // Firebase database URL
 const databaseURL = "https://whiteboard-5795a-default-rtdb.firebaseio.com";
 
+// getting elements
 const canvas = document.getElementById("whiteboard");
 const ctx = canvas.getContext("2d");
 const notes = document.getElementById("notes");
