@@ -35,6 +35,8 @@ canvas {
 textarea {
     overflow: hidden;
     resize: none;
+    width: 200px;
+    height: 400px;
     min-width: 100px;
     min-height: 20px;
     font-family: Arial, sans-serif;
