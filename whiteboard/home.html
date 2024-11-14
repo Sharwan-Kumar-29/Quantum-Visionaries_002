@@ -4,22 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home page for whiteboard</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-thin-straight/css/uicons-thin-straight.css'> 
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-straight/css/uicons-bold-straight.css'>   
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-straight/css/uicons-regular-straight.css'>
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-straight/css/uicons-bold-straight.css'>
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-thin-straight/css/uicons-thin-straight.css'>
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>    
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
-
 </head>
 <body>
     <div class="toolbar">
         <!-- Toolbar with drawing options and controls -->
-
         <button data-tooltip="Draw with Pen" onclick="setMode('pen')"><i class="fi fi-ts-drawer-alt"></i></button>
         <button data-tooltip="Draw line" onclick="setMode('line')"><i class="fi fi-bs-slash"></i></button>
         <button data-tooltip="Draw circle" onclick="setMode('circle')"><i class="fi fi-rr-circle"></i></button>
@@ -39,8 +27,6 @@
         <input type="range"  min="1" max="10" value="2" id="brushSize" onchange="setBrushSize(this.value)">
         
         <input type="file"  id="imageUpload" onchange="uploadImage(event)">
-
-
     </div>
 
     <div class="container">
@@ -51,7 +37,7 @@
             <h3>Saved Files</h3>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="whiteboard.js"></script>
     
 </body>
 </html>
