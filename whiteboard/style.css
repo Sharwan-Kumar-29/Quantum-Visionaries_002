@@ -15,6 +15,32 @@ body {
 
 }
 
+/* Tooltip styling */
+button[data-tooltip] {
+    position: relative;
+}
+
+button[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%; /* Adjust position above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 10;
+}
+
+button[data-tooltip]:hover::after {
+    opacity: 1;
+}
+
 button{
     width: 40px;
     height: 40px;
