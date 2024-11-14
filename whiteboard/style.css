@@ -1,22 +1,79 @@
+@import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css');
 body {
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
+    
+}
+.fi{
+    color: red;
+    font-size: 24px;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+
 }
 
+button{
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    background-color: rgb(244, 126, 9);
+}
+
+#reset-btn{
+    width: 60px;
+}
 .toolbar {
-    margin: 10px;
-}
-
-.container {
+    background-color: #ffffff; /* Solid background color */
+    top: 0;
+    position: fixed;
+    width: 100%;
+    height: 60px; 
     display: flex;
-    align-items: flex-start;
-    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+    padding: 20px;
+    z-index: 1000;
 }
 
+img{
+color: red;
+font-size: 30px;
+
+}
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top:100px;
+}
+
+.saved-files{
+    border: 1px solid rgb(147, 143, 143);
+    width: 18%;
+}
+h3{
+    margin-top: 0;
+    background-color: rgb(242, 94, 41);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    width: 90%;
+    border: 1pf solid black;
+
+}
 canvas {
-    border: 1px solid #000;
+    width: 75%;
+    border: 1px solid #8a8686;
     cursor: crosshair;
     margin-right: 10px;
 }
@@ -55,8 +112,9 @@ textarea {
 }
 
 .file-thumbnail {
-    width: 100px;
-    height: 60px;
+    border: 1px solid rgb(169, 164, 164);
+    width: 80%;
+    height: 50px;
     margin-bottom: 10px;
     cursor: pointer;
 }
@@ -66,17 +124,7 @@ textarea {
     height: 100%;
 }
 
-.saved-notes {
-    margin-left: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
 
-.saved-note {
-    padding: 5px;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    width: 200px;
-    font-size: 16px;
+#imageUpload{
+    color: white;
 }
