@@ -94,9 +94,6 @@ function setColor(newColor) {
 function setBrushSize(size) {
     brushSize = size;
 
-    if (mode === "eraser") {
-        ctx.lineWidth = brushSize;  // Ensure the brush size is set when erasing
-    }
 }
 
 function clearCanvas() {
