@@ -4,17 +4,25 @@ let signupForm = document.getElementById("signup-form")
 signupForm.addEventListener("submit", (e) => {
     e.preventDefault();
     // get username, email and password 
-    // const username = document.getElementById("username").value 
+    const username = document.getElementById("username").value 
     const email = document.getElementById("signup-email").value
     const password = document.getElementById("signup-password").value
 
+    // remove leading and trailing spaces
+    username = username.trim()
+    email = email.trim()
+    password = password.trim()
+
+    // users data as obj
     const userData = {
+        username: username,
         email: email,
         password: password,
     }
-    // validate password 
-    if (password.trim().length >= 6) {
-        console.log(email, password)
+
+    // password length
+    if (password.length >= 6) {
+        // validate and store user data 
         validateSignUp(userData)
     }
     else {
@@ -28,7 +36,6 @@ async function validateSignUp(userData) {
     // api and url to validate users data
     const API_KEY = "AIzaSyD4sqsxSpMI58pH2DimueULkR_PCVWEUdY"
     const URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`
-
 
     const requestOptions = {
         method: "POST",
@@ -51,11 +58,13 @@ async function validateSignUp(userData) {
                 window.location.href = "./signIn.html"
             }
         }
+        // response error
         else{
             let res = await response.json()
             console.log(res.error.message)
             alert(res.error.message)
         }
+    // network request error
     } catch (err) {
         alert("Network error, Try after some time")
         console.error(err)
@@ -91,6 +100,7 @@ async function storeData(userData, data) {
             return false
         }
         return true
+    // fetch request error
     } catch (err) {
         console.error(err)
         return false

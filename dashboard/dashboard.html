@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./dashboard.css">
+    <title>Dashboard Quantum Visionaries</title>
+</head>
+
+<body>
+    <nav id="navbar">
+        <div id="hamburger-menu" onclick="displaySideNavbar()"><img src="./../Assets/images/hamburger-menu.png" alt="hamburger-menu"></div>
+        <a href="#" id="home-link">
+            <div id="nav-logo"><img src="./../Assets/logo/logo.jpg" alt=""> Quantum Visionaries</div>
+        </a>
+
+        <div id="nav-dashboard"><a>Dashboard</a></div>
+        <div id="nav-profile" onclick="profile()"><img src="./../Assets/images/user.png" alt=""></div>
+    </nav>
+    <nav id="side-nav">
+        <ul>
+            <li><p>Quantum Visionaries</p></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Contact us</a></li>
+
+        </ul>
+        <div id="close-side-bar" onclick="hideSideNavbar()">Close</div>
+    </nav>
+    <main>
+        <section id="new-design">
+            <div>
+            <p>New whiteboard</p>
+            <div class="design-options">
+                <div id="blank-whiteboard">
+                    <div><img src="./../Assets/images/plus.png" alt="blank whiteboard"></div>
+                    <p>Blank whiteboard</p>
+                </div>
+                <div id="flow-chart">
+                    <div><img src="./../Assets/images/flowchart.png" alt=""></div>
+                    <p>Flow Chart</p>
+                </div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        </section>
+        <section id="recent-designs">
+            <div>
+            <p>Recent whiteboards</p>
+            <div class="design-options">
+                <div id="blank-whiteboard">
+                    <div><img src="./../Assets/images/plus.png" alt="blank whiteboard"></div>
+                    <p>Blank whiteboard</p>
+                </div>
+                <div id="flow-chart">
+                    <div><img src="./../Assets/images/flowchart.png" alt=""></div>
+                    <p>Flow Chart</p>
+                </div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        </section>
+
+    </main>
+</body>
+
+</html>
+<script src="./dashboard.js"></script>
