@@ -4,31 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home page for whiteboard</title>
-    <link rel="stylesheet" href="./whiteboard.css">
-    
 </head>
 <body>
     <div class="toolbar">
         <!-- Toolbar with drawing options and controls -->
-        <button onclick="setMode('pen')">Pen</button>
-        <button onclick="setMode('line')">Line</button>
-        <button onclick="setMode('circle')">Circle</button>
-        <button onclick="setMode('rectangle')">Rectangle</button>
-        <button onclick="setMode('arrow')">Arrow</button>
-        <button onclick="setMode('ellipse')">Ellipse</button>
-        <button onclick="setMode('text')">Text</button>
-        <input type="file" id="imageUpload" onchange="uploadImage(event)">
-        <button onclick="setMode('eraser')">Eraser</button>
-        <button onclick="clearCanvas()">Clear</button>
-        <button onclick="undo()">Undo</button>
-        <button onclick="redo()">Redo</button>
-
-        <button onclick="saveToFirebase()">Save to Firebase</button>
-        <button onclick="loadSavedFiles()">Load from Firebase</button>
-        <input type="color" id="colorPicker" onchange="setColor(this.value)">
-        <input type="range" min="1" max="10" value="2" id="brushSize" onchange="setBrushSize(this.value)">
-        <button onclick="setBackgroundColor()">Change Background</button>
-        <button onclick="resetBackgroundColor()">Reset Background</button>
+        <button data-tooltip="Draw with Pen" onclick="setMode('pen')"><i class="fi fi-ts-drawer-alt"></i></button>
+        <button data-tooltip="Draw line" onclick="setMode('line')"><i class="fi fi-bs-slash"></i></button>
+        <button data-tooltip="Draw circle" onclick="setMode('circle')"><i class="fi fi-rr-circle"></i></button>
+        <button data-tooltip="Draw rectangle" onclick="setMode('rectangle')"><i class="fi fi-rs-rectangle-horizontal"></i></button>
+        <button data-tooltip="Draw arrow" onclick="setMode('arrow')"><i class="fi fi-bs-arrow-up-right"></i></button>
+        <button data-tooltip="Draw oval" onclick="setMode('ellipse')"><i class="fi fi-rr-oval"></i></button>
+        <button data-tooltip="Draw text" onclick="setMode('text')"><i class="fi fi-ts-text-box"></i></button>
+        <button data-tooltip="Draw eraser" onclick="setMode('eraser')"><i class="fi fi-rs-eraser"></i></button>
+        <button data-tooltip="Draw clear" onclick="clearCanvas()"><i class="fi fi-bs-trash"></i></button>
+        <button data-tooltip="Draw undo" onclick="undo()"><i class="fi fi-br-undo-alt"></i></button>
+        <button data-tooltip="Draw redo" onclick="redo()"><i class="fi fi-br-redo-alt"></i></button>
+        <button data-tooltip="Background change" onclick="setBackgroundColor()"><i class="fi fi-ss-background"></i></button>
+        <button data-tooltip="Reset background" onclick="resetBackgroundColor()" id="reset-btn">Reset</button>
+        <button data-tooltip="Save to firebase" onclick="saveToFirebase()"><i class="fi fi-rs-disk"></i></button>
+        <button data-tooltip="Load Saved files" onclick="loadSavedFiles()"><i class="fi fi-bs-feedback-cycle-loop"></i></button>
+        <input type="color"  id="colorPicker" onchange="setColor(this.value)">
+        <input type="range"  min="1" max="10" value="2" id="brushSize" onchange="setBrushSize(this.value)">
+        
+        <input type="file"  id="imageUpload" onchange="uploadImage(event)">
     </div>
 
     <div class="container">
