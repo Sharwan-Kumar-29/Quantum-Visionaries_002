@@ -47,6 +47,7 @@ async function validateLogin(userData){
         if(resp.ok){
             let res = await resp.json()
             alert("Login successful")
+            console.log(res)
             return res
         }
         else{
