@@ -38,6 +38,8 @@ textarea {
     min-width: 100px;
     min-height: 20px;
     font-family: Arial, sans-serif;
+    width: 200px;
+    height: 400px;
     font-size: 16px;
     padding: 5px;
     color: #000;
