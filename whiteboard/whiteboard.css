@@ -21,10 +21,30 @@ canvas {
     margin-right: 10px;
 }
 
+.resize-handle {
+    width: 10px;
+    height: 10px;
+    background-color: #000;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: se-resize;
+}
+
+/* To make the textarea auto-expand */
 textarea {
-    width: 200px;
-    height: 400px;
+    overflow: hidden;
+    resize: none;
+    min-width: 100px;
+    min-height: 20px;
+    font-family: Arial, sans-serif;
     font-size: 16px;
+    padding: 5px;
+    color: #000;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ccc;
+    position: absolute;
+    z-index: 1000;
 }
 
 .saved-files {

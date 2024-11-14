@@ -41,6 +41,7 @@ async function validateLogin(userData){
             let res = await resp.json()
             alert("Login successful")
             console.log(res)
+            
         }
         else{
             let err = await resp.json()
