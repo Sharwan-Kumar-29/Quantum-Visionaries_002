@@ -61,7 +61,6 @@ async function validateSignUp(userData) {
     }
 }
 
-
 // store data in firebase
 async function storeDataToFirebase(userData, data) {
     // store data at this url 

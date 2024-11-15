@@ -6,56 +6,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./dashboard.css">
     <title>Dashboard Quantum Visionaries</title>
+    <script type="module">
+        import { checkTokenValidity } from "../src/validateToken.js";
+        // check if token is avlailable and valid 
+        const isTokenValid = async function () {
+            const token = localStorage.getItem("authToken")
+            if (token) {
+                const isValid = await checkTokenValidity(token);
+                if (!isValid.status) {
+                    redirectTologin()
+                }
+            }
+            else {
+                console.log("no token")
+                redirectTologin()
+            }
+        }
+        window.addEventListener("load", isTokenValid)
+        function redirectTologin(){
+            window.location.href = `./../signIn/signIn.html`
+        }
+    </script>
 </head>
 
 <body>
     <nav id="navbar">
-        <div id="hamburger-menu" onclick="displaySideNavbar()"><img src="./../Assets/images/hamburger-menu.png" alt="hamburger-menu"></div>
-        <a href="#" id="home-link">
+        <div id="hamburger-menu" onclick="displaySideNavbar()"><img src="./../Assets/images/hamburger-menu.png"
+                alt="hamburger-menu"></div>
+        <a href="./../index.html" id="home-link">
             <div id="nav-logo"><img src="./../Assets/logo/logo.jpg" alt=""> Quantum Visionaries</div>
         </a>
 
         <div id="nav-dashboard"><a>Dashboard</a></div>
-        <div id="nav-profile" onclick="profile()"><img src="./../Assets/images/user.png" alt=""></div>
+        <div id="nav-user-div"><img src="./../Assets/images/user.png" alt="">
+            <!-- <img src="./../Assets/images/logout.png" alt="logout-logo" onclick="logOut()"> -->
+        </div>
     </nav>
+    <!-- side nav bar for small screen -->
     <nav id="side-nav">
         <ul>
-            <li><p>Quantum Visionaries</p></li>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">Contact us</a></li>
+            <li>
+                <p>Quantum Visionaries</p>
+            </li>
+            <li><a href="./../index.html">Home</a></li>
+            <li><a>Dashboard</a></li>
+            <li onclick="logOut()">log out</li>
 
         </ul>
         <div id="close-side-bar" onclick="hideSideNavbar()">Close</div>
     </nav>
+
+    <!-- user profile -->
+    <div id="user-profile">
+        <div id="user-img"></div>
+        <div id="user-details"></div>
+    </div>
     <main>
         <section id="new-design">
             <div>
-            <p>New whiteboard</p>
-            <div class="design-options">
-                <div id="blank-whiteboard">
-                    <div><img src="./../Assets/images/plus.png" alt="blank whiteboard"></div>
-                    <p>Blank whiteboard</p>
-                </div>
-                <div id="flow-chart">
-                    <div><img src="./../Assets/images/flowchart.png" alt=""></div>
-                    <p>Flow Chart</p>
+                <p>New whiteboard</p>
+                <div class="design-options">
+                    <div id="blank-whiteboard">
+                        <div><img src="./../Assets/images/plus.png" alt="blank whiteboard"></div>
+                        <p>Blank whiteboard</p>
+                    </div>
+                    <div id="flow-chart">
+                        <div><img src="./../Assets/images/flowchart.png" alt=""></div>
+                        <p>Flow Chart</p>
+                    </div>
                 </div>
             </div>
-        </div>
         </section>
         <section id="recent-designs">
             <div>
-            <p>Recent whiteboards</p>
-            <div class="design-options" id="recent-whiteboards">
-                
+                <p>Recent whiteboards</p>
+                <div class="design-options" id="recent-whiteboards">
+
+                </div>
             </div>
-        </div>
         </section>
 
     </main>
 </body>
 
 </html>
-<script src="./dashboard.js"></script>
+<script src="./dashboard.js" type="module"></script>

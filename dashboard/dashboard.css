@@ -54,6 +54,14 @@ a {
     width: 32px;
 }
 
+#nav-user-div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+
 /* side nav bar for small screen  */
 #side-nav{
     display: none;
