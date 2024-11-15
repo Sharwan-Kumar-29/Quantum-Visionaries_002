@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <title>Home page for whiteboard</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-thin-straight/css/uicons-thin-straight.css'> 
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-straight/css/uicons-bold-straight.css'>   
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-straight/css/uicons-regular-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-straight/css/uicons-bold-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-thin-straight/css/uicons-thin-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>    
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=download" />
+
 </head>
 <body>
     <div class="toolbar">
@@ -16,29 +28,33 @@
         <button data-tooltip="Draw arrow" onclick="setMode('arrow')"><i class="fi fi-bs-arrow-up-right"></i></button>
         <button data-tooltip="Draw oval" onclick="setMode('ellipse')"><i class="fi fi-rr-oval"></i></button>
         <button data-tooltip="Draw text" onclick="setMode('text')"><i class="fi fi-ts-text-box"></i></button>
-        <button data-tooltip="Draw eraser" onclick="setMode('eraser')"><i class="fi fi-rs-eraser"></i></button>
+        <button data-tooltip="Draw eraser" onclick="setMode('erase')"><i class="fi fi-rs-eraser"></i></button>
         <button data-tooltip="Draw clear" onclick="clearCanvas()"><i class="fi fi-bs-trash"></i></button>
         <button data-tooltip="Draw undo" onclick="undo()"><i class="fi fi-br-undo-alt"></i></button>
         <button data-tooltip="Draw redo" onclick="redo()"><i class="fi fi-br-redo-alt"></i></button>
         <button data-tooltip="Background change" onclick="setBackgroundColor()"><i class="fi fi-ss-background"></i></button>
-        <button data-tooltip="Reset background" onclick="resetBackgroundColor()" id="reset-btn">Reset</button>
         <button data-tooltip="Save to firebase" onclick="saveToFirebase()"><i class="fi fi-rs-disk"></i></button>
-        <button data-tooltip="Load Saved files" onclick="loadSavedFiles()"><i class="fi fi-bs-feedback-cycle-loop"></i></button>
+        <!-- <button data-tooltip="Load Saved files" onclick="loadSavedFiles()"><i class="fi fi-bs-feedback-cycle-loop"></i></button> -->
         <input type="color"  id="colorPicker" onchange="setColor(this.value)">
-        <input type="range"  min="1" max="10" value="2" id="brushSize" onchange="setBrushSize(this.value)">
-        
+        <input type="range"  min="1" max="10" value="2" id="brushSize" onchange="setBrushSize(this.value)">      
         <input type="file"  id="imageUpload" onchange="uploadImage(event)">
+        
+        <button class="download-btn" onclick="toggleDownloadOptions()"><span class="material-symbols-outlined">download</span></button>
+        
+        <!-- Download Options Dropdown -->
+        <div class="download-options" id="downloadOptions">
+            <button onclick="downloadCanvas('png')">PNG</button>
+            <button onclick="downloadCanvas('jpg')">JPG</button>
+            <button onclick="downloadPDF()">PDF</button>
+        </div>
+
     </div>
 
     <div class="container">
         <!-- Whiteboard and Notes area -->
         <canvas id="whiteboard"></canvas>
         <textarea id="notes" placeholder="Write your notes here..."></textarea>
-        <div class="saved-files" id="savedFiles">
-            <h3>Saved Files</h3>
-        </div>
     </div>
     <script src="script.js"></script>
-    
 </body>
 </html>

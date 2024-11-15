@@ -6,14 +6,15 @@ body {
     align-items: center;
     
 }
-.fi{
-    color: red;
+i,span{
+    /* color: red; */
     font-size: 24px;
     color: white;
     text-align: center;
     font-weight: bold;
 
 }
+
 
 /* Tooltip styling */
 button[data-tooltip] {
@@ -155,4 +156,47 @@ textarea {
 
 #imageUpload{
     color: white;
+}
+
+/* Style for the download button with the arrow */
+.download-btn {
+    position: relative;
+    width: 70px;
+    right: 20px;
+    padding-right: 20px; 
+}
+
+/* Style for the dropdown button (showing the arrow) */
+.download-btn::after {
+    content: '▼';
+    font-size: 14px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+/* Hide the download options initially */
+.download-options {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 65px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100px;
+    z-index: 1000;
+}
+
+.download-options button {
+    display: block;
+    margin: 5px 0;
+    width: 100%;
+}
+
+.download-options.show {
+    display: block;
 }
