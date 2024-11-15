@@ -15,15 +15,7 @@ signinForm.addEventListener("submit", (e)=>{
         email : email,
         password: password,
     }
-    const resp = validateLogin(userData)
-    // login successful or not
-    if(resp){
-        window.location.href = `./../dashboard/dashboard.html`
-    }
-    else{
-        // login failed try again
-        signinForm.reset()
-    }
+    validateLogin(userData)
 })
 
 
@@ -40,26 +32,30 @@ async function validateLogin(userData){
         },
         body : JSON.stringify({email: userData.email, password: userData.password, returnSecureToken: true,})
     }
-
     try{
         let resp = await fetch(URL, requestOptions)
 
         if(resp.ok){
+            // login success 
             let res = await resp.json()
-            alert("Login successful")
-            console.log(res)
-            return res
+            alert("Login successful, redirecting to dashboard")
+            localStorage.setItem("authToken", res.idToken)
+            redirectToDashboard()
         }
         else{
+            // login failed
             let err = await resp.json()
-            alert(err.error.message)
-            // console.error(err)
-            return false
+            alert(err.error.message+", Try again")
+            signinForm.reset()
         }
     }
     catch(err){
         // network request error
-        console.log(err)
         alert("Something went wrong, please try again later")
     }
+}
+
+
+function redirectToDashboard(){
+    window.location.href = `./../dashboard/dashboard.html`
 }

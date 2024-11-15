@@ -1,17 +1,12 @@
 let signupForm = document.getElementById("signup-form")
 
-
+// on form submit 
 signupForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    // get username, email and password 
-    const username = document.getElementById("username").value 
-    const email = document.getElementById("signup-email").value
-    const password = document.getElementById("signup-password").value
-
-    // remove leading and trailing spaces
-    username = username.trim()
-    email = email.trim()
-    password = password.trim()
+    // get username, email and password, remove trailing and leading spaces
+    const username = document.getElementById("username").value.trim()
+    const email = document.getElementById("signup-email").value.trim()
+    const password = document.getElementById("signup-password").value.trim()
 
     // users data as obj
     const userData = {
@@ -46,25 +41,20 @@ async function validateSignUp(userData) {
     }
     try {
         let response = await fetch(URL, requestOptions)
-        if(response.ok){
+        if (response.ok) {
             let res = await response.json()
             const data = {
-                userId : res.localId,
-                idToken : res.idToken,
+                userId: res.localId,
+                idToken: res.idToken,
             }
-            let store = storeData(userData, data)
-            if(store){
-                alert("Sign up successful, Login please")
-                window.location.href = "./signIn.html"
-            }
+            storeDataToFirebase(userData, data)
         }
-        // response error
-        else{
+        else {
+            // response error
             let res = await response.json()
-            console.log(res.error.message)
             alert(res.error.message)
         }
-    // network request error
+        // network request error
     } catch (err) {
         alert("Network error, Try after some time")
         console.error(err)
@@ -73,7 +63,7 @@ async function validateSignUp(userData) {
 
 
 // store data in firebase
-async function storeData(userData, data) {
+async function storeDataToFirebase(userData, data) {
     // store data at this url 
     const URL = `https://user-authentication-ebb7d-default-rtdb.firebaseio.com/users/${data.userId}.json`
 
@@ -91,19 +81,24 @@ async function storeData(userData, data) {
         body: JSON.stringify(bodyObj),
     }
 
-    // try storing the data to project database
+    // try storing the data to firebase database
     try {
         let resp = await fetch(URL, requestOptions)
-        if(!resp.ok){
+        if (!resp.ok) {
             let err = await resp.json()
-            console.log(err)
-            return false
+            console.log(err.error.message)
         }
-        return true
-    // fetch request error
+        else{
+            alert("Sign up successful, redirecting to login")
+            redirectTologin()
+        }
     } catch (err) {
-        console.error(err)
-        return false
+        // fetch request error
+        console.error(err.error.message)
     }
+}
 
+// redirect user to login 
+function redirectTologin(){
+    window.location.href = `./signIn.html`
 }
