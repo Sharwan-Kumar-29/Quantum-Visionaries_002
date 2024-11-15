@@ -7,13 +7,13 @@ const canvas = document.getElementById("whiteboard");
 const ctx = canvas.getContext("2d");
 const notes = document.getElementById("notes");
 const toolbar = document.getElementById("toolbar");
-const savedFilesContainer = document.getElementById("savedFiles");
-
+//canvas width and height
 canvas.width = 1100;
 canvas.height = 800;
+
 notes.style.display = "none";
 let isDrawing = false;
-let mode = "None";  // Default mode
+let mode = "pen";  // Default mode
 let color = "#000000"; // Default color
 let brushSize = 2;  // Default brush size
 let isTextMode = false;
@@ -34,10 +34,6 @@ canvas.addEventListener("mousedown", startInteraction);
 canvas.addEventListener("mouseup", stopInteraction);
 canvas.addEventListener("mousemove", interact);
 canvas.addEventListener("click", addTextOnCanvas);
-canvas.addEventListener("mousedown", startResizingOrDragging);
-canvas.addEventListener("mousemove", resizeOrDragImage);
-canvas.addEventListener("mouseup", stopResizingOrDragging);
-
 
 // Starts drawing
 function startInteraction(e) {
@@ -91,30 +87,84 @@ function setColor(newColor) {
     color = newColor;
 }
 
+// Function to toggle the visibility of the slider
+function toggleSlider() {
+    const slider = document.getElementById('brushSizeSlider');
+    if (slider.style.display === 'none') {
+        slider.style.display = 'block';
+    } else {
+        slider.style.display = 'none';
+    }
+}
 // Sets the brush size
 function setBrushSize(size) {
     brushSize = size;
+    console.log(size);
 
     if (mode === "eraser") {
         ctx.lineWidth = brushSize;  // Ensure the brush size is set when erasing
     }
 }
 
-function clearCanvas() {
-    // Clear only the canvas area where drawings are made
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Fill with the background color
-    ctx.fillStyle = backgroundColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    undoStack = [];
-    redoStack = [];
-    // Redraw all images
-    images.forEach(img => {
-        ctx.drawImage(img.image, img.x, img.y, img.width, img.height);
-    });
+
+
+// Draws a shape based on the selected mode
+function drawShape() {
+    const width = Math.abs(startX - event.offsetX);
+    const height = Math.abs(startY - event.offsetY);
+
+    switch (mode) {
+        case 'line':
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(event.offsetX, event.offsetY);
+            ctx.stroke();
+            break;
+        case 'circle':
+            ctx.beginPath();
+            ctx.arc(startX, startY, width, 0, 2 * Math.PI);
+            ctx.stroke();
+            break;
+        case 'rectangle':
+            ctx.beginPath();
+            ctx.rect(startX, startY, width, height);
+            ctx.stroke();
+            break;
+        case 'ellipse':
+            ctx.beginPath();
+            ctx.ellipse(startX, startY, width, height, 0, 0, 2 * Math.PI);
+            ctx.stroke();
+            break;
+    }
+}
+
+// Draws an arrow
+function drawArrow() {
+    const endX = startX + (event.offsetX - startX);
+    const endY = startY + (event.offsetY - startY);
+    const arrowSize = 10;
+    const angle = Math.atan2(endY - startY, endX - startX);
+
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = brushSize;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(endX, endY);
+    ctx.lineTo(endX - arrowSize * Math.cos(angle - Math.PI / 6), endY - arrowSize * Math.sin(angle - Math.PI / 6));
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(endX, endY);
+    ctx.lineTo(endX - arrowSize * Math.cos(angle + Math.PI / 6), endY - arrowSize * Math.sin(angle + Math.PI / 6));
+    ctx.stroke();
 }
 
 
+// text area on canvas code for text area setting
 function addTextOnCanvas(e) {
     if (isTextMode) {
         const x = e.offsetX;
@@ -129,7 +179,7 @@ function addTextArea(x, y) {
     textArea.style.top = `${canvas.offsetTop + y}px`;
 
     // Styling the text area to resemble the desired look
-    textArea.style.font = "16px Arial";
+    textArea.style.font = "25px Arial";
     textArea.style.color = color;
     textArea.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
     textArea.style.border = "1px solid #ccc";
@@ -146,10 +196,11 @@ function addTextArea(x, y) {
     textArea.addEventListener("input", () => autoResize(textArea));
 
     // Save the text to canvas when user finishes typing
-    textArea.addEventListener("blur", () => saveTextToCanvas(textArea, x, y));
-    textArea.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
+    textArea.addEventListener("blur", () => saveTextToCanvas(textArea, x, y)); // Save on blur
+
+    // Save text when clicking anywhere outside the text area
+    document.addEventListener("mousedown", (e) => {
+        if (!textArea.contains(e.target)) { // If click target is not the text area
             saveTextToCanvas(textArea, x, y);
         }
     });
@@ -169,7 +220,7 @@ function autoResize(textArea) {
 }
 
 function saveTextToCanvas(textArea, x, y) {
-    ctx.font = "16px Arial";
+    ctx.font = "25px Arial";
     ctx.fillStyle = color;
 
     // Get the text content, preserve line breaks
@@ -182,7 +233,88 @@ function saveTextToCanvas(textArea, x, y) {
     textArea.remove();
 }
 
-// Function to upload image
+function clearCanvas() {
+    // Clear only the canvas area where drawings are made
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Fill with the background color
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    undoStack = [];
+    redoStack = [];
+
+}
+
+// Saves the current canvas state for undo/redo
+function saveCanvasState() {
+    const canvasState = canvas.toDataURL();
+    undoStack.push(canvasState);
+    redoStack = [];
+}
+
+// Undo the last action
+function undo() {
+    if (undoStack.length > 1) {
+        const lastState = undoStack.pop();
+        redoStack.push(lastState);
+        const previousState = undoStack[undoStack.length - 1];
+        restoreCanvasState(previousState);
+    }
+}
+
+// Redo the last undone action
+function redo() {
+    if (redoStack.length > 0) {
+        const redoState = redoStack.pop();
+        undoStack.push(redoState);
+        restoreCanvasState(redoState);
+    }
+}
+
+
+// Saves the canvas and notes to Firebase
+async function saveToFirebase() {
+    const notes = document.getElementById("notes").value;
+    const drawingData = canvas.toDataURL();
+    const data = {
+        drawing: drawingData,
+        notes: notes,
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        const response = await fetch(`${databaseURL}/whiteboard_data.json`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            alert("Data saved successfully!");
+            loadSavedFiles();
+            loadSavedNotes();
+        } else {
+            console.error("Failed to save data:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error saving to Firebase:", error);
+    }
+}
+
+
+
+// Restores the canvas state from a saved data URL
+function restoreCanvasState(state) {
+    const img = new Image();
+    img.src = state;
+    img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+    };
+}
+
+// Function to insert image
 function uploadImage(event) {
     const file = event.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -192,10 +324,10 @@ function uploadImage(event) {
             img.onload = function () {
                 const imgData = {
                     image: img,
-                    x: 50,
-                    y: 50,
-                    width: 100,
-                    height: 100
+                    x: 100,
+                    y: 100,
+                    width: 500,
+                    height: 500
                 };
                 images.push(imgData); // Add the new image to the array
                 drawImages(); // Draw all images (including the new one) on the canvas
@@ -217,14 +349,55 @@ function drawImages() {
 }
 
 
-function setBackgroundColor() {
-    const newColor = prompt("Enter a hex color code or choose from color picker:", "#ffffff");
-    if (newColor) {
-        backgroundColor = newColor;
-        canvas.style.backgroundColor = backgroundColor;
-        clearCanvas();
-    }
+// Function to toggle the visibility of the dropdown
+function toggleColorDropdown() {
+    const dropdown = document.getElementById("colorDropdown");
+    // Toggle visibility of the dropdown
+    dropdown.style.display = (dropdown.style.display === "none" || dropdown.style.display === "") ? "block" : "none";
 }
+
+// Function to set the background color
+// Function to toggle the visibility of the color options below the background button
+function toggleColorOptions(event) {
+    const colorOptions = document.getElementById("colorOptions");
+
+    // Show or hide the color options
+    colorOptions.style.display = (colorOptions.style.display === "none" || colorOptions.style.display === "") ? "block" : "none";
+
+    // Position the color options directly below the button
+    if (colorOptions.style.display === "block") {
+        const button = document.getElementById("backgroundButton");
+        const rect = button.getBoundingClientRect();
+        colorOptions.style.left = `${rect.left}px`;
+        colorOptions.style.top = `${rect.bottom + window.scrollY}px`;
+    }
+
+    // Prevent the event from propagating so it doesn't trigger the document click listener
+    event.stopPropagation();
+}
+
+// Function to set the background color when an option is selected
+function setBackgroundColor(color) {
+    backgroundColor = color;
+    canvas.style.backgroundColor = backgroundColor;
+    clearCanvas();
+
+    // Hide the color options after selection
+    document.getElementById("colorOptions").style.display = "none";
+}
+
+// Function to close the color options when clicking outside
+document.addEventListener('click', function (event) {
+    const colorOptions = document.getElementById("colorOptions");
+    const button = document.getElementById("backgroundButton");
+
+    // If the click is outside the color options or button, hide the color options
+    if (!colorOptions.contains(event.target) && event.target !== button) {
+        colorOptions.style.display = "none";
+    }
+});
+
+
 
 function toggleDownloadOptions() {
     const downloadOptions = document.getElementById("downloadOptions");
@@ -235,7 +408,7 @@ function downloadCanvas(format) {
     const canvas = document.getElementById("whiteboard");
     const link = document.createElement('a');
     let dataUrl;
-    
+
     if (format === 'png') {
         dataUrl = canvas.toDataURL('image/png');
     } else if (format === 'jpg') {
@@ -300,127 +473,7 @@ function makeResizable(textArea, resizeHandle) {
         isResizing = false;
     });
 }
-// Saves the current canvas state for undo/redo
-function saveCanvasState() {
-    const canvasState = canvas.toDataURL();
-    undoStack.push(canvasState);
-    redoStack = [];
-}
 
-// Undo the last action
-function undo() {
-    if (undoStack.length > 1) {
-        const lastState = undoStack.pop();
-        redoStack.push(lastState);
-        const previousState = undoStack[undoStack.length - 1];
-        restoreCanvasState(previousState);
-    }
-}
-
-// Redo the last undone action
-function redo() {
-    if (redoStack.length > 0) {
-        const redoState = redoStack.pop();
-        undoStack.push(redoState);
-        restoreCanvasState(redoState);
-    }
-}
-
-// Restores the canvas state from a saved data URL
-function restoreCanvasState(state) {
-    const img = new Image();
-    img.src = state;
-    img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0);
-    };
-}
-
-// Draws an arrow
-function drawArrow() {
-    const endX = startX + (event.offsetX - startX);
-    const endY = startY + (event.offsetY - startY);
-    const arrowSize = 10;
-    const angle = Math.atan2(endY - startY, endX - startX);
-
-    ctx.beginPath();
-    ctx.moveTo(startX, startY);
-    ctx.lineTo(endX, endY);
-    ctx.strokeStyle = color;
-    ctx.lineWidth = brushSize;
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(endX, endY);
-    ctx.lineTo(endX - arrowSize * Math.cos(angle - Math.PI / 6), endY - arrowSize * Math.sin(angle - Math.PI / 6));
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(endX, endY);
-    ctx.lineTo(endX - arrowSize * Math.cos(angle + Math.PI / 6), endY - arrowSize * Math.sin(angle + Math.PI / 6));
-    ctx.stroke();
-}
-
-// Draws a shape based on the selected mode
-function drawShape() {
-    const width = Math.abs(startX - event.offsetX);
-    const height = Math.abs(startY - event.offsetY);
-
-    switch (mode) {
-        case 'line':
-            ctx.beginPath();
-            ctx.moveTo(startX, startY);
-            ctx.lineTo(event.offsetX, event.offsetY);
-            ctx.stroke();
-            break;
-        case 'circle':
-            ctx.beginPath();
-            ctx.arc(startX, startY, width, 0, 2 * Math.PI);
-            ctx.stroke();
-            break;
-        case 'rectangle':
-            ctx.beginPath();
-            ctx.rect(startX, startY, width, height);
-            ctx.stroke();
-            break;
-        case 'ellipse':
-            ctx.beginPath();
-            ctx.ellipse(startX, startY, width, height, 0, 0, 2 * Math.PI);
-            ctx.stroke();
-            break;
-    }
-}
-
-// Saves the canvas and notes to Firebase
-async function saveToFirebase() {
-    const notes = document.getElementById("notes").value;
-    const drawingData = canvas.toDataURL();
-    const data = {
-        drawing: drawingData,
-        notes: notes,
-        timestamp: new Date().toISOString()
-    };
-
-    try {
-        const response = await fetch(`${databaseURL}/whiteboard_data.json`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
-
-        if (response.ok) {
-            alert("Data saved successfully!");
-            loadSavedFiles();
-            loadSavedNotes();
-        } else {
-            console.error("Failed to save data:", response.statusText);
-        }
-    } catch (error) {
-        console.error("Error saving to Firebase:", error);
-    }
-}
 
 // // Loads saved files from Firebase
 // async function loadSavedFiles() {
