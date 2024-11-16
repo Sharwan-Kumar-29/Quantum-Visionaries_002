@@ -165,8 +165,9 @@ textarea {
 .download-btn {
     position: relative;
     width: 70px;
-    left: 210px;
-    right: 40px;
+    right: 20px;
+    left: 110px;
+
     padding-right: 20px; 
 }
 
@@ -186,20 +187,21 @@ textarea {
     display: none;
     position: absolute;
     top: 70px;
-    right: 40px;
-    border-radius: 6px;
+    right: 3em;
+
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100px;
+    width: 6em;
     z-index: 1000;
 }
 
 
 .download-options button {
     display: block;
+    border: 1px solid #ccc;
     width: 100%;
     border-radius: 0;
-    border: 1px solid rgb(213, 207, 207);
+
 }
 
 .download-options.show {
@@ -214,6 +216,10 @@ body {
     display: none;
 }
 
+input[type="file"] {
+    display: none;
+}
+
 #colorDropdown{
     list-style: none;
 }
@@ -222,8 +228,10 @@ body {
 
 .color-options {
     position: absolute;
-    width: 90px;
-    background-color: white;
+    top: 1em;
+    width: 6em;
+    margin-top: -13em;
+    left: 0;
     border: 1px solid #ccc;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000; /* Ensure it appears above other elements */
@@ -267,13 +275,13 @@ body {
 
 /* Style the range slider */
 #brushSizeSlider {
-    margin-top: 10px;
+    margin-top: 1em;
     color: orange;
     background-color: #000;
-    width: 100px;
+    width: 6em;
     display: none; /* Initially hidden */
     position: absolute;
-    top: 70%;
-    right: 30%;
+    top: 5em;
+    right: 23em;
 }
 

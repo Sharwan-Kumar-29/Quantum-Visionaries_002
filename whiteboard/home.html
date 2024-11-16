@@ -26,8 +26,8 @@
         href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=download" />
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=brush" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=brush" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
@@ -39,8 +39,11 @@
         <button data-tooltip="Circle" onclick="setMode('circle')"><i class="fi fi-rr-circle"></i></button>
         <button data-tooltip="Rectangle" onclick="setMode('rectangle')"><i
                 class="fi fi-rs-rectangle-horizontal"></i></button>
+        <button data-tooltip="Triangle" onclick="setMode('triangle')"><i class="fi fi-rr-triangle"></i></button>
         <button data-tooltip="Arrow" onclick="setMode('arrow')"><i class="fi fi-bs-arrow-up-right"></i></button>
         <button data-tooltip="Oval" onclick="setMode('ellipse')"><i class="fi fi-rr-oval"></i></button>
+        <button data-tooltip="Diamond" onclick="setMode('diamond')"><i class="fa-sharp fa-solid fa-diamond"></i></button>
+        <button data-tooltip="Parallelogram" onclick="setMode('parallelogram')"><i class="fi fi-rr-slash"></i></button>
         <button data-tooltip="Enter text" onclick="setMode('text')"><i class="fi fi-ts-text-box"></i></button>
         <button data-tooltip="Erase" onclick="setMode('erase')"><i class="fi fi-rs-eraser"></i></button>
         <button data-tooltip="Clear" onclick="clearCanvas()"><i class="fi fi-bs-trash"></i></button>
@@ -64,9 +67,9 @@
                 class="material-symbols-outlined">brush</span></button>
         <input type="range" min="1" max="10" value="2" id="brushSizeSlider" onchange="setBrushSize(this.value)">
         <!-- add image -->
-        <!-- <input type="file" id="imageUpload" onchange="uploadImage(event)"> -->
-        <button onclick="addImageToCanvas()"><i class="fa-solid fa-image"></i></button>
-
+        <input type="file" id="fileInput" accept="image/*" onchange="loadImage(event)">
+        <button onclick="document.getElementById('fileInput').click()"><i class="fa-regular fa-image"></i></button>
+        
 
         <!-- Download Options Dropdown -->
         <div class="download-container">
