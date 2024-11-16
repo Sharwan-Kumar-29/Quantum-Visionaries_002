@@ -24,7 +24,7 @@
             }
         }
         window.addEventListener("load", isTokenValid)
-        function redirectTologin(){
+        function redirectTologin() {
             window.location.href = `./../signIn/signIn.html`
         }
     </script>
@@ -32,15 +32,15 @@
 
 <body>
     <nav id="navbar">
-        <div id="hamburger-menu" onclick="displaySideNavbar()"><img src="./../Assets/images/hamburger-menu.png"
-                alt="hamburger-menu"></div>
+        <div id="hamburger-menu" onclick="displaySideNavbar()"><img src="./../src/Assets/images/hamburger-menu.png"
+                alt="hamburger-menu" id="hamburger-menu-icon"></div>
         <a href="./../index.html" id="home-link">
-            <div id="nav-logo"><img src="./../Assets/logo/logo.jpg" alt=""> Quantum Visionaries</div>
+            <div id="nav-logo"><img src="./../src/Assets/logo/logo.png" alt=""> Quantum Visionaries</div>
         </a>
 
         <div id="nav-dashboard"><a>Dashboard</a></div>
-        <div id="nav-user-div"><img src="./../Assets/images/user.png" alt="">
-            <!-- <img src="./../Assets/images/logout.png" alt="logout-logo" onclick="logOut()"> -->
+        <div id="nav-user-div"><img src="./../src/Assets/images/user.png" alt="">
+            <img src="./../src/Assets/images/dark-mode.png" alt="theme-img" id="theme-image" onclick="changeTheme()">
         </div>
     </nav>
     <!-- side nav bar for small screen -->
@@ -51,7 +51,9 @@
             </li>
             <li><a href="./../index.html">Home</a></li>
             <li><a>Dashboard</a></li>
-            <li onclick="logOut()">log out</li>
+            <li>About Us</li>
+            <li>Contact Us</li>
+            <li onclick="logOut()" class="logout">log out</li>
 
         </ul>
         <div id="close-side-bar" onclick="hideSideNavbar()">Close</div>
@@ -68,17 +70,17 @@
                 <p>New whiteboard</p>
                 <div class="design-options">
                     <div id="blank-whiteboard">
-                        <div><img src="./../Assets/images/plus.png" alt="blank whiteboard"></div>
+                        <div><img src="./../src/Assets/images/plus.png" alt="blank whiteboard"></div>
                         <p>Blank whiteboard</p>
                     </div>
                     <div id="flow-chart">
-                        <div><img src="./../Assets/images/flowchart.png" alt=""></div>
+                        <div><img src="./../src/Assets/images/flowchart.png" alt=""></div>
                         <p>Flow Chart</p>
                     </div>
                 </div>
             </div>
         </section>
-        <section id="recent-designs">
+        <section id="recent-designs" style="height: 500px;">
             <div>
                 <p>Recent whiteboards</p>
                 <div class="design-options" id="recent-whiteboards">
@@ -88,7 +90,18 @@
         </section>
 
     </main>
+    <div id="create-new-whiteboard">
+        <h1>Whiteboard details </h1>
+        <div>
+            <label class="label">Project name<span class="mandatory">*</span></label>
+            <input type="text" id="whiteboard-name">
+        </div>
+        <div>
+            <button id="cancel-new-wb">Cancel</button>
+            <button id="create-new-wb">Create</button>
+        </div>
+    </div>
 </body>
 
 </html>
-<script src="./dashboard.js" type="module"></script>
+<script src="./dashboard.js"></script>
