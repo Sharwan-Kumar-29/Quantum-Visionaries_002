@@ -123,7 +123,7 @@ textarea {
     overflow: hidden;
     resize: none;
     width: 200px;
-    height: 400px;
+    height: 200px;
     min-width: 100px;
     min-height: 20px;
     font-family: Arial, sans-serif;
@@ -165,7 +165,8 @@ textarea {
 .download-btn {
     position: relative;
     width: 70px;
-    right: 20px;
+    left: 210px;
+    right: 40px;
     padding-right: 20px; 
 }
 
@@ -185,10 +186,9 @@ textarea {
     display: none;
     position: absolute;
     top: 70px;
-    right: 65px;
+    right: 40px;
     border-radius: 6px;
     border: 1px solid #ccc;
-    padding: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100px;
     z-index: 1000;
@@ -197,8 +197,9 @@ textarea {
 
 .download-options button {
     display: block;
-    margin: 5px 0;
     width: 100%;
+    border-radius: 0;
+    border: 1px solid rgb(213, 207, 207);
 }
 
 .download-options.show {
@@ -220,14 +221,12 @@ body {
 /* background color change button css */
 
 .color-options {
-    display: none;
     position: absolute;
-    top: 100%;
-    width: 100px;
-    left: 0;
+    width: 90px;
+    background-color: white;
     border: 1px solid #ccc;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensure it appears above other elements */
 }
 
 .color-options button {
@@ -265,17 +264,6 @@ body {
 }
 
 /* change size of brush */
-  /* Style the button
-  #toggleSliderButton {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-} */
 
 /* Style the range slider */
 #brushSizeSlider {
