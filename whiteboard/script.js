@@ -21,6 +21,8 @@ let backgroundColor = "#ffffff";
 let startX, startY; // Start coordinates for shapes
 let textAreaElements = []; // Track text areas for moving and resizing
 let images = [];  // Array to store image data
+let imgX = 0, imgY = 0, imgWidth = 150, imgHeight = 150; // Initial position and size of the image
+let drawingData = []; // Store the drawing data (paths)
 
 let isResizing = false; // Flag to check if resizing is happening
 let isDragging = false; // Flag to check if dragging is happening
@@ -37,39 +39,82 @@ canvas.addEventListener("click", addTextOnCanvas);
 
 // Starts drawing
 function startInteraction(e) {
+    const { offsetX, offsetY } = e;
     isDrawing = true;
-    startX = e.offsetX;
-    startY = e.offsetY;
+    startX = offsetX;
+    startY = offsetY;
 
-    if (mode === 'pen') {
+    // Initialize drawing paths or handle mode-specific actions
+    if (mode === 'pen' || mode === 'eraser') {
         ctx.beginPath();
-        ctx.moveTo(startX, startY);
+        ctx.moveTo(offsetX, offsetY);
+        if (mode === 'pen') {
+            drawingData.push({ path: [{ x: offsetX, y: offsetY }], color: color, size: brushSize });
+        }
+    } else if (mode === 'line' || mode === 'rectangle' || mode === 'circle' || mode === 'ellipse') {
+        // Start drawing a shape
+        ctx.beginPath();
+    } else if (imgX && offsetX >= imgX && offsetX <= imgX + imgWidth && offsetY >= imgY && offsetY <= imgY + imgHeight) {
+        // Handle image interaction (dragging or resizing)
+        if (offsetX >= imgX + imgWidth - 10 && offsetY >= imgY + imgHeight - 10) {
+            isResizing = true;
+        } else {
+            isDragging = true;
+        }
     }
 }
+
 
 // Stops drawing and saves the canvas state
 function stopInteraction() {
     isDrawing = false;
-    if (mode === 'pen') {
+
+    if (mode === 'pen' || mode === 'eraser') {
         ctx.closePath();
     } else if (mode === 'line' || mode === 'circle' || mode === 'rectangle' || mode === 'ellipse' || mode === 'diamond'|| mode === 'parallelogram' || mode === 'triangle') {
         drawShape();
     } else if (mode === 'arrow') {
         drawArrow();
     }
-    saveCanvasState();
+
+    saveCanvasState(); // Save the state after the interaction
 }
 
 // Handles drawing with the pen tool
 function interact(e) {
     if (!isDrawing) return;
 
+    const { offsetX, offsetY } = e;
+
     if (mode === 'pen') {
         ctx.lineWidth = brushSize;
         ctx.lineCap = "round";
-        ctx.strokeStyle = mode === "eraser" ? "#ffffff" : color;  // Use white if erasing
-        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.strokeStyle = color;
+        ctx.lineTo(offsetX, offsetY);
         ctx.stroke();
+
+        // Save drawing path for pen tool
+        drawingData[drawingData.length - 1].path.push({ x: offsetX, y: offsetY });
+    } else if (mode === 'eraser') {
+        ctx.lineWidth = brushSize;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "#ffffff"; // Erase with white color
+        ctx.lineTo(offsetX, offsetY);
+        ctx.stroke();
+    } else if (isDragging) {
+        // Move the image
+        const deltaX = offsetX - startX;
+        const deltaY = offsetY - startY;
+        imgX += deltaX;
+        imgY += deltaY;
+        startX = offsetX;
+        startY = offsetY;
+        redrawCanvas();
+    } else if (isResizing) {
+        // Resize the image
+        imgWidth = offsetX - imgX;
+        imgHeight = offsetY - imgY;
+        redrawCanvas();
     }
 }
 
@@ -170,7 +215,6 @@ function drawShape() {
             ctx.lineTo(rightX, rightY); // Draw line to right vertex
             ctx.closePath(); // Close the triangle
             ctx.stroke();
-            break;
     }
 }
 // Draws an arrow
@@ -253,6 +297,53 @@ function autoResize(textArea) {
     textArea.style.height = 'auto';
     textArea.style.height = textArea.scrollHeight + 'px';
 }
+
+// Make text area draggable
+function makeDraggable(element) {
+    let offsetX, offsetY, isDragging = false;
+
+    element.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        offsetX = e.clientX - element.offsetLeft;
+        offsetY = e.clientY - element.offsetTop;
+    });
+
+    document.addEventListener("mousemove", (e) => {
+        if (isDragging) {
+            element.style.left = `${e.clientX - offsetX}px`;
+            element.style.top = `${e.clientY - offsetY}px`;
+        }
+    });
+
+    document.addEventListener("mouseup", () => {
+        isDragging = false;
+    });
+}
+
+// Make text area resizable
+function makeResizable(textArea, resizeHandle) {
+    let isResizing = false;
+
+    resizeHandle.addEventListener("mousedown", (e) => {
+        isResizing = true;
+        e.preventDefault();
+    });
+
+    document.addEventListener("mousemove", (e) => {
+        if (isResizing) {
+            const width = e.clientX - textArea.offsetLeft;
+            const height = e.clientY - textArea.offsetTop;
+            textArea.style.width = `${width}px`;
+            textArea.style.height = `${height}px`;
+            autoResize(textArea); // Ensure auto-resize behavior
+        }
+    });
+
+    document.addEventListener("mouseup", () => {
+        isResizing = false;
+    });
+}
+
 
 function saveTextToCanvas(textArea, x, y) {
     ctx.font = "25px Arial";
@@ -364,7 +455,6 @@ function loadImage(event) {
     };
     img.src = URL.createObjectURL(file); // Create a temporary object URL for the image
 }
-
 
 // Draw the canvas with all images
 function drawCanvas() {
@@ -497,7 +587,7 @@ document.addEventListener('click', function (event) {
 });
 
 
-
+// download file code
 function toggleDownloadOptions() {
     const downloadOptions = document.getElementById("downloadOptions");
     downloadOptions.style.display = downloadOptions.style.display === 'none' ? 'block' : 'none';
@@ -526,51 +616,6 @@ function downloadPDF() {
     const imgData = canvas.toDataURL('image/png');
     doc.addImage(imgData, 'PNG', 10, 10, 180, 160);
     doc.save('whiteboard.pdf');
-}
-// Make text area draggable
-function makeDraggable(element) {
-    let offsetX, offsetY, isDragging = false;
-
-    element.addEventListener("mousedown", (e) => {
-        isDragging = true;
-        offsetX = e.clientX - element.offsetLeft;
-        offsetY = e.clientY - element.offsetTop;
-    });
-
-    document.addEventListener("mousemove", (e) => {
-        if (isDragging) {
-            element.style.left = `${e.clientX - offsetX}px`;
-            element.style.top = `${e.clientY - offsetY}px`;
-        }
-    });
-
-    document.addEventListener("mouseup", () => {
-        isDragging = false;
-    });
-}
-
-// Make text area resizable
-function makeResizable(textArea, resizeHandle) {
-    let isResizing = false;
-
-    resizeHandle.addEventListener("mousedown", (e) => {
-        isResizing = true;
-        e.preventDefault();
-    });
-
-    document.addEventListener("mousemove", (e) => {
-        if (isResizing) {
-            const width = e.clientX - textArea.offsetLeft;
-            const height = e.clientY - textArea.offsetTop;
-            textArea.style.width = `${width}px`;
-            textArea.style.height = `${height}px`;
-            autoResize(textArea); // Ensure auto-resize behavior
-        }
-    });
-
-    document.addEventListener("mouseup", () => {
-        isResizing = false;
-    });
 }
 
 
