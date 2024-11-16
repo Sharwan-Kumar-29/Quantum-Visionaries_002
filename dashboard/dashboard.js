@@ -1,4 +1,3 @@
-
 // side navbar for small width screen  
 function displaySideNavbar() {
     console.log("clicked")
@@ -8,14 +7,13 @@ function displaySideNavbar() {
 }
 function hideSideNavbar() {
     let sideNav = document.getElementById("side-nav")
-
     sideNav.style.display = "none";
 }
 
 // hide side navbar for mid and large screen size 
 window.addEventListener("resize", () => {
     const sideNav = document.getElementById("side-nav")
-
+    
     let width = window.innerWidth;
     if (width > 480) {
         sideNav.style.display = "none"
@@ -24,11 +22,63 @@ window.addEventListener("resize", () => {
 
 
 
-// open blank whiteboard option
+// new blank whiteboard 
 const blankWhiteboard = document.getElementById("blank-whiteboard")
+
 blankWhiteboard.addEventListener("click", () => {
-    window.location.href = `./../whiteboard/home.html`
+    // blur the background except navigation 
+    let main = document.querySelector("main")
+    main.classList.add("blur","no-pointer-events")
+    let whiteboardDetails = document.getElementById("create-new-whiteboard")
+
+    whiteboardDetails.style.display = "block";
 })
+// cancel creating new blank whiteboard
+document.getElementById("cancel-new-wb").addEventListener("click", ()=>{
+    document.getElementById("create-new-whiteboard").style.display = "none";
+    document.querySelector("main").classList.remove("blur", "no-pointer-events")
+})
+
+
+// go to new whiteboard
+document.getElementById("create-new-wb").addEventListener("click", ()=>{
+    let nameInput = document.getElementById("whiteboard-name")
+
+    const newWhiteboard = nameInput.value.trim()
+    nameInput.value = ""
+    redirectToNewWhiteBoard(newWhiteboard)
+})
+
+// redirect user to blank whiteboard
+function redirectToNewWhiteBoard(whiteboardName){
+    window.location.href = `./../whiteboard/home.html?k=${whiteboardName}`
+}
+
+
+
+
+// change theme
+let theme = document.getElementById("theme-image")
+theme.onclick = function (){
+    document.body.classList.toggle("dark-theme")
+    
+    let hamburger = document.getElementById("hamburger-menu-icon")
+    if(document.body.classList.contains("dark-theme")){
+        // change theme-change icon 
+        theme.setAttribute("src", "./../src/Assets/images/light-mode.png")
+
+        // change hamburger icon 
+        hamburger.src = "./../src/Assets/images/hamburger-white-menu.png"
+    }
+    else{
+        // change theme-change icon 
+        theme.setAttribute("src", "./../src/Assets/images/dark-mode.png")
+
+        // change hamburger icon 
+        hamburger.src = "./../src/Assets/images/hamburger-menu.png"
+        
+    }
+}
 
 
 
@@ -36,8 +86,8 @@ blankWhiteboard.addEventListener("click", () => {
 async function getUserId() {
     const API_KEY = "AIzaSyD4sqsxSpMI58pH2DimueULkR_PCVWEUdY"
     const URL = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`;
-    
-    
+
+
     const requestOptions = {
         method: "POST",
         headers: {
@@ -50,7 +100,7 @@ async function getUserId() {
         let resp = await fetch(URL, requestOptions)
         if (resp.ok) {
             const res = await resp.json();
-            
+
             // get userId from the response 
             const userId = res.users[0].localId;
             // fetch users data from database
@@ -71,30 +121,30 @@ async function getUserId() {
 }
 
 // fetch users data from database 
-async function fetchUserData(id){
+async function fetchUserData(id) {
     const API_KEY = "AIzaSyD4sqsxSpMI58pH2DimueULkR_PCVWEUdY";
     const URL = `https://user-authentication-ebb7d-default-rtdb.firebaseio.com/users/${id}.json`
 
-    try{
+    try {
         const resp = await fetch(URL)
 
-        if(resp.ok){
+        if (resp.ok) {
             const res = await resp.json()
             console.log(res)
             // displayUserData(res)
         }
-        else{
+        else {
             const err = await resp.json()
             console.log(err)
         }
     }
-    catch(err){
+    catch (err) {
         console.log(err)
     }
 }
 
 // display user data 
-function displayUserData(user){
+function displayUserData(user) {
 
 }
 
@@ -131,7 +181,7 @@ function displayRecentWhiteboards(whiteboards) {
 }
 
 // redirect the user 
-function redirectTologin(){
+function redirectTologin() {
     window.location.href = `./../signIn/signIn.html`
 }
 
@@ -140,4 +190,6 @@ function logOut() {
     localStorage.removeItem("authToken")
     window.location.href = `./../index.html`
 }
+
+
 
