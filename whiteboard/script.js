@@ -474,66 +474,6 @@ function makeResizable(textArea, resizeHandle) {
     });
 }
 
-
-// // Loads saved files from Firebase
-// async function loadSavedFiles() {
-//     const savedFilesContainer = document.getElementById("savedFiles");
-//     savedFilesContainer.innerHTML = "<h3>Saved Files</h3>";  // Reset saved files list
-
-//     try {
-//         const response = await fetch(`${databaseURL}/whiteboard_data.json`);
-
-//         if (!response.ok) {
-//             throw new Error("Failed to fetch data");
-//         }
-
-//         const data = await response.json();
-
-//         if (data) {
-//             Object.keys(data).forEach(key => {
-//                 const entry = data[key];  // Get each saved entry (drawing, notes, notesColor)
-
-//                 const img = new Image();
-//                 img.src = entry.drawing;  // Set image source from saved drawing
-//                 img.onload = () => {
-//                     const fileThumbnail = document.createElement("div");
-//                     fileThumbnail.classList.add("file-thumbnail");
-//                     fileThumbnail.onclick = () => loadFile(entry.drawing, entry.notes, entry.notesColor);  // Set click event to load file
-
-//                     const thumbnailImg = document.createElement("img");
-//                     thumbnailImg.src = entry.drawing;  // Display thumbnail image
-//                     fileThumbnail.appendChild(thumbnailImg);
-
-//                     savedFilesContainer.appendChild(fileThumbnail);  // Add thumbnail to the page
-//                 };
-//             });
-//         }
-//     } catch (error) {
-//         console.error("Error loading saved files:", error);
-//     }
-// }
-
-// function loadFile(drawingData, notes, backgroundColor, images) {
-//     const img = new Image();
-//     img.onload = () => {
-//         clearCanvas();
-//         ctx.drawImage(img, 0, 0); // Redraw the saved image
-//     };
-//     img.src = drawingData;
-
-//     // Reload the saved notes
-//     document.getElementById("notes").value = notes;
-//     document.getElementById("notes").style.color = "black";  // Set notes color if necessary
-
-//     // Apply saved background color
-//     canvas.style.backgroundColor = backgroundColor;
-
-//     // Load and draw images
-//     images.forEach((imgData) => {
-//         ctx.drawImage(imgData.image, imgData.x, imgData.y, imgData.width, imgData.height);
-//     });
-// }
-
 //Initializes the canvas and loads saved data on page load
 window.onload = () => {
     saveCanvasState();
