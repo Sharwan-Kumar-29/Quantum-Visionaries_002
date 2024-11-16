@@ -52,7 +52,7 @@ function stopInteraction() {
     isDrawing = false;
     if (mode === 'pen') {
         ctx.closePath();
-    } else if (mode === 'line' || mode === 'circle' || mode === 'rectangle' || mode === 'ellipse') {
+    } else if (mode === 'line' || mode === 'circle' || mode === 'rectangle' || mode === 'ellipse' || mode === 'diamond'|| mode === 'parallelogram' || mode === 'triangle') {
         drawShape();
     } else if (mode === 'arrow') {
         drawArrow();
@@ -135,9 +135,44 @@ function drawShape() {
             ctx.ellipse(startX, startY, width, height, 0, 0, 2 * Math.PI);
             ctx.stroke();
             break;
+        case 'diamond':
+            ctx.setLineDash([]); // Solid
+            ctx.moveTo(startX, startY - height / 2); // Top vertex
+            ctx.lineTo(startX + width / 2, startY); // Right vertex
+            ctx.lineTo(startX, startY + height / 2); // Bottom vertex
+            ctx.lineTo(startX - width / 2, startY); // Left vertex
+            ctx.closePath();
+            ctx.stroke();
+            break;
+
+        case 'parallelogram':
+            ctx.setLineDash([]); // Solid
+            const offset = width / 4; // Slant factor
+            ctx.moveTo(startX + offset, startY);
+            ctx.lineTo(startX + width, startY);
+            ctx.lineTo(startX + width - offset, startY + height);
+            ctx.lineTo(startX, startY + height);
+            ctx.closePath();
+            ctx.stroke();
+            break;
+        case 'triangle':
+            ctx.setLineDash([]); // Solid
+            // Calculate the vertices of the triangle
+            const baseX = startX;
+            const baseY = startY + height; // Bottom vertex
+            const leftX = startX - width / 2;
+            const leftY = startY; // Left vertex
+            const rightX = startX + width / 2;
+            const rightY = startY; // Right vertex
+
+            ctx.moveTo(baseX, baseY);  // Move to bottom vertex
+            ctx.lineTo(leftX, leftY); // Draw line to left vertex
+            ctx.lineTo(rightX, rightY); // Draw line to right vertex
+            ctx.closePath(); // Close the triangle
+            ctx.stroke();
+            break;
     }
 }
-
 // Draws an arrow
 function drawArrow() {
     const endX = startX + (event.offsetX - startX);
@@ -302,52 +337,116 @@ async function saveToFirebase() {
     }
 }
 
+//add images to whiteboard
+// Global variables for image manipulation
+let selectedImage = null;
+let isMouseDown = false;
+let offsetX, offsetY;
 
-
-// Restores the canvas state from a saved data URL
-function restoreCanvasState(state) {
-    const img = new Image();
-    img.src = state;
-    img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0);
-    };
-}
-
-// Function to insert image
-function uploadImage(event) {
+// Load the image from local file manager
+function loadImage(event) {
     const file = event.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const img = new Image();
-            img.onload = function () {
-                const imgData = {
-                    image: img,
-                    x: 100,
-                    y: 100,
-                    width: 500,
-                    height: 500
-                };
-                images.push(imgData); // Add the new image to the array
-                drawImages(); // Draw all images (including the new one) on the canvas
-            };
-            img.src = e.target.result;
+    if (!file) return;
+
+    const img = new Image();
+    img.onload = () => {
+        const imageProps = {
+            img: img,
+            x: 50, // Initial X position
+            y: 50, // Initial Y position
+            width: img.width / 4, // Initial width (scaled down)
+            height: img.height / 4, // Initial height (scaled down)
+            isDragging: false,
+            isResizing: false,
         };
-        reader.readAsDataURL(file);
-    } else {
-        alert("Please upload a valid image file.");
-    }
+        images.push(imageProps);
+        drawCanvas(); // Redraw the canvas to include the new image
+    };
+    img.src = URL.createObjectURL(file); // Create a temporary object URL for the image
 }
 
-// Function to draw all images on the canvas
-function drawImages() {
-    // Assuming 'ctx' is the canvas context
-    images.forEach((imgData) => {
-        ctx.drawImage(imgData.image, imgData.x, imgData.y, imgData.width, imgData.height);
+
+// Draw the canvas with all images
+function drawCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+    images.forEach((image) => {
+        ctx.drawImage(image.img, image.x, image.y, image.width, image.height);
+    });
+    drawResizeHandles(); // Draw resize handles
+}
+
+// Mouse down event
+whiteboard.addEventListener('mousedown', (event) => {
+    const { offsetX: x, offsetY: y } = event;
+    isMouseDown = true;
+    selectedImage = null;
+
+    // Check if the mouse is over an image
+    images.forEach((image) => {
+        if (
+            x >= image.x &&
+            x <= image.x + image.width &&
+            y >= image.y &&
+            y <= image.y + image.height
+        ) {
+            selectedImage = image;
+            offsetX = x - image.x;
+            offsetY = y - image.y;
+
+            // Check if resizing (near bottom-right corner)
+            if (
+                x >= image.x + image.width - 10 &&
+                y >= image.y + image.height - 10
+            ) {
+                selectedImage.isResizing = true;
+            } else {
+                selectedImage.isDragging = true;
+            }
+        }
+    });
+});
+
+// Mouse move event
+whiteboard.addEventListener('mousemove', (event) => {
+    if (!isMouseDown || !selectedImage) return;
+
+    const { offsetX: x, offsetY: y } = event;
+
+    if (selectedImage.isDragging) {
+        // Move the image
+        selectedImage.x = x - offsetX;
+        selectedImage.y = y - offsetY;
+    } else if (selectedImage.isResizing) {
+        // Resize the image
+        selectedImage.width = x - selectedImage.x;
+        selectedImage.height = y - selectedImage.y;
+    }
+
+    drawCanvas(); // Redraw the canvas
+});
+
+// Mouse up event
+whiteboard.addEventListener('mouseup', () => {
+    isMouseDown = false;
+    if (selectedImage) {
+        selectedImage.isDragging = false;
+        selectedImage.isResizing = false;
+    }
+    selectedImage = null;
+});
+
+// Optional: Draw resize handles on images
+function drawResizeHandles() {
+    images.forEach((image) => {
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(
+            image.x + image.width - 10,
+            image.y + image.height - 10,
+            10,
+            10
+        );
     });
 }
-
 
 // Function to toggle the visibility of the dropdown
 function toggleColorDropdown() {
@@ -473,6 +572,8 @@ function makeResizable(textArea, resizeHandle) {
         isResizing = false;
     });
 }
+
+
 
 //Initializes the canvas and loads saved data on page load
 window.onload = () => {
