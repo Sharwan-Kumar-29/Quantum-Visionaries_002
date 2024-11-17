@@ -65,11 +65,12 @@ async function validateSignUp(userData) {
 async function storeDataToFirebase(userData, data) {
     // store data at this url 
     const URL = `https://quantum-visionaries-002-default-rtdb.firebaseio.com/users/${data.userId}.json`
-
+    console.log(userData)
     const bodyObj = {
-        "userId": data.userId,
-        "email": userData.email,
-        "password": userData.password,
+        userId: data.userId,
+        email: userData.email,
+        password: userData.password,
+        username: userData.username,
     }
 
     const requestOptions = {

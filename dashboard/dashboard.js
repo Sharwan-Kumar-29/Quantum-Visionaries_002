@@ -7,12 +7,12 @@ let userId;
 
 // get user id from google authentication api request 
 async function getUserData() {
-    console.log("getting user data")
     const token = localStorage.getItem("authToken")
     const res = await getUserId(token)
     if (res.value) {
         userId = res.value;
         fetchWhiteboards(res.value)
+        fetchUserData(userId)
     }
     else {
         console.error("Invalid session login again")
@@ -126,7 +126,6 @@ function displayRecentWhiteboards(whiteboards) {
 
 // delete whiteboard 
 async function deleteWhiteboard(whiteboard){
-    console.log(whiteboard)
     whiteboards = Object.keys(whiteboards).filter(key => key!==whiteboard).reduce((acc, key)=>{
         acc[key] = whiteboards[key];
         return acc;
@@ -157,6 +156,45 @@ async function deleteWhiteboard(whiteboard){
 
 }
 
+// fetch and append user data 
+async function fetchUserData(userId){
+    const URL = `https://quantum-visionaries-002-default-rtdb.firebaseio.com/users/${userId}.json`
+    try{
+        let resp = await fetch(URL)
+        if(resp.ok){
+            let data = await resp.json()
+            appendUserDate(data)
+        }
+        else{
+            let err = await resp.json()
+            console.log(err.error.message)
+        }
+    }
+    catch(err){
+        console.log(err)
+        alert(err.error.message)
+    }
+
+}
+
+function appendUserDate(data){
+    let profileDiv = document.getElementById("user-details")
+
+    profileDiv.innerHTML = `
+    <p>${data.username}</p>
+    <p>${data.email}</p>
+    `
+    let logoutbtn = document.createElement("div")
+    logoutbtn.textContent = "Logout"
+
+    profileDiv.appendChild(logoutbtn)
+
+    logoutbtn.addEventListener("click", logout)
+
+}
+
+
+
 
 document.getElementById("hamburger-menu").addEventListener("click", displaySideNavbar)
 // side navbar for small width screen  
@@ -185,13 +223,11 @@ document.getElementById("close-side-bar").addEventListener("click", ()=>{
 
 // log out the user 
 function logout() {
-    console.log(true)
     localStorage.removeItem("authToken")
     window.location.href = `./../index.html`
 }
 // logout from side navbar
 document.getElementById("logout").addEventListener("click", logout)
-
 
 
 
@@ -248,6 +284,18 @@ function redirectToNewWhiteBoard(whiteboardName) {
 
 
 
+// display profile
+function displayProfile(){
+    let profileDiv = document.getElementById("user-profile")
+    if(profileDiv.style.display === "none"){
+        profileDiv.style.display = "block"
+    }
+    else{
+        profileDiv.style.display = "none"
+    }
+}
+
+document.getElementById("profile-icon").addEventListener("click", displayProfile)
 
 // change theme
 let theme = document.getElementById("theme-image")
@@ -323,7 +371,6 @@ function sortRecentWhiteboards() {
     const sortBy = sortWhiteboards.value;
     let copyWhiteboard = {...whiteboards}
 
-    console.log(copyWhiteboard)
     if (sortBy === "name-asc") {
         copyWhiteboard = Object.keys(copyWhiteboard).sort().reduce((obj, key) => {
                 obj[key] = copyWhiteboard[key];
