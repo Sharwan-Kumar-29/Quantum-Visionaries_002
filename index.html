@@ -575,6 +575,7 @@
         const token = localStorage.getItem("authToken")
         if (token) {
             let isValid = await checkTokenValidity(token)
+            console.log(isValid)
             if (isValid.status) {
                 window.location.href = "./dashboard/dashboard.html"
             }

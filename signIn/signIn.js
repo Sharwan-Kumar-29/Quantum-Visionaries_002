@@ -38,8 +38,8 @@ async function validateLogin(userData){
         if(resp.ok){
             // login success 
             let res = await resp.json()
-            alert("Login successful, redirecting to dashboard")
             localStorage.setItem("authToken", res.idToken)
+            alert("Login successful, redirecting to dashboard")
             redirectToDashboard()
         }
         else{

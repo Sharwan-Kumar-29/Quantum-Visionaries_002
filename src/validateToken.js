@@ -1,7 +1,7 @@
 // checks the token validity 
 export async function checkTokenValidity(token) {
     const API_KEY = "AIzaSyAMEfr0Ge_MZPTZbNH75kOxQS2sjNuzhdQ"
-    const URL = `https:identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`
+    const URL = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`
 
     const requestOptions = {
         method: "POST",
@@ -14,18 +14,21 @@ export async function checkTokenValidity(token) {
         // fetch the validity of token 
         let resp = await fetch(URL, requestOptions)
         if (resp.ok) {
+            let res = await resp.json()
             // token valid, redirect to dashboard
-            return {status: true}
+            return {status: true, userData: res.users[0]}
         }
         else {
             // Invalid token (expired)
+            let err = await resp.json()
+            console.log(err, err.error.message)
             localStorage.removeItem("authToken")
-            return {status: false}
+            return {status: false, err: err.error.message}
 
         }
     } catch (error) {
         console.log("Error while validating the token", error)
-        return {status: false}
+        return {status: false, err: err.error.message}
     }
 
 }
