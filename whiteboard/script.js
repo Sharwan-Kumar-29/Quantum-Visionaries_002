@@ -11,7 +11,7 @@ const toolbar = document.getElementById("toolbar");
 //canvas width and height
 canvas.width = 1100;
 canvas.height = 800;
-
+let img=null;
 notes.style.display = "none";
 let isDrawing = false;
 let mode = "pen";  // Default mode
@@ -368,7 +368,10 @@ function clearCanvas() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     undoStack = [];
     redoStack = [];
-
+    // Redraw all images
+    images.forEach(img => {
+        ctx.drawImage(img.image, img.x, img.y, img.width, img.height);
+    });
 }
 
 // Saves the current canvas state for undo/redo
@@ -407,6 +410,35 @@ function redo() {
     }
 }
 
+// Restores the canvas state from a saved data URL
+function restoreCanvasState(state) {
+    const img = new Image();
+    img.src = state;
+    img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+    };
+}
+
+// Redraw the canvas and draw the paths and image
+function redrawCanvas() {
+    clearCanvas();
+
+    // Draw the image if it exists
+    if (img) {
+        ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
+    }
+
+    // Redraw all saved paths
+    drawingData.forEach(drawing => {
+        ctx.beginPath();
+        ctx.lineWidth = drawing.size;
+        ctx.strokeStyle = drawing.color;
+        ctx.moveTo(drawing.path[0].x, drawing.path[0].y);
+        drawing.path.forEach(point => ctx.lineTo(point.x, point.y));
+        ctx.stroke();
+    });
+}
 
 // Saves the canvas and notes to Firebase
 async function saveToFirebase() {
