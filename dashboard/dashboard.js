@@ -1,6 +1,5 @@
 import { getUserId } from "../src/validateToken.js"
 
-
 // stores the whiteboards saved by user in firebase 
 let whiteboards;
 let userId;

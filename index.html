@@ -530,9 +530,6 @@
         </section>
 
 
-
-
-
         <footer class="footer">
             <div class="footer-container">
                 <div class="footer-about">
@@ -568,28 +565,26 @@
         </footer>
     </div>
 
-
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAMEfr0Ge_MZPTZbNH75kOxQS2sjNuzhdQ",
-            authDomain: "quantum-visionaries-002.firebaseapp.com",
-            databaseURL: "https://quantum-visionaries-002-default-rtdb.firebaseio.com",
-            projectId: "quantum-visionaries-002",
-            storageBucket: "quantum-visionaries-002.firebasestorage.app",
-            messagingSenderId: "157756351753",
-            appId: "1:157756351753:web:46bad66908983864965fd8"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-    </script>
 </body>
 
 </html>
-<script src="./src/script.js" type="module"></script>
+<!-- login session validity checking -->
+<script type="module">
+    import { checkTokenValidity } from "./src/validateToken.js"
+    document.getElementById("get-started").onclick = async function () {
+        const token = localStorage.getItem("authToken")
+        if (token) {
+            let isValid = await checkTokenValidity(token)
+            if (isValid.status) {
+                window.location.href = "./dashboard/dashboard.html"
+            }
+            else{
+                localStorage.removeItem("authToken")
+                window.location.href = "./signIn/signIn.html"
+            }
+        }
+        else{
+            window.location.href = "./signIn/signIn.html"
+        }
+    }
+</script>
