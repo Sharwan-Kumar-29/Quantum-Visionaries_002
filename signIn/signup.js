@@ -29,7 +29,7 @@ signupForm.addEventListener("submit", (e) => {
 // signUp authentication
 async function validateSignUp(userData) {
     // api and url to validate users data
-    const API_KEY = "AIzaSyD4sqsxSpMI58pH2DimueULkR_PCVWEUdY"
+    const API_KEY = "AIzaSyAMEfr0Ge_MZPTZbNH75kOxQS2sjNuzhdQ"
     const URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`
 
     const requestOptions = {
@@ -64,7 +64,7 @@ async function validateSignUp(userData) {
 // store data in firebase
 async function storeDataToFirebase(userData, data) {
     // store data at this url 
-    const URL = `https://user-authentication-ebb7d-default-rtdb.firebaseio.com/users/${data.userId}.json`
+    const URL = `https://quantum-visionaries-002-default-rtdb.firebaseio.com/users/${data.userId}.json`
 
     const bodyObj = {
         "userId": data.userId,

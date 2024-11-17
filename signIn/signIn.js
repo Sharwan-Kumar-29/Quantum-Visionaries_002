@@ -21,7 +21,7 @@ signinForm.addEventListener("submit", (e)=>{
 
 // function to validate login Credentials 
 async function validateLogin(userData){
-    const API_KEY = "AIzaSyD4sqsxSpMI58pH2DimueULkR_PCVWEUdY"
+    const API_KEY = "AIzaSyAMEfr0Ge_MZPTZbNH75kOxQS2sjNuzhdQ"
 
     const URL = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`
 

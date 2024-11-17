@@ -1,6 +1,6 @@
 // checks the token validity 
 export async function checkTokenValidity(token) {
-    const API_KEY = "AIzaSyD4sqsxSpMI58pH2DimueULkR_PCVWEUdY"
+    const API_KEY = "AIzaSyAMEfr0Ge_MZPTZbNH75kOxQS2sjNuzhdQ"
     const URL = `https:identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`
 
     const requestOptions = {
@@ -31,7 +31,7 @@ export async function checkTokenValidity(token) {
 }
 
 export async function getUserId(token) {
-    const API_KEY = "AIzaSyD4sqsxSpMI58pH2DimueULkR_PCVWEUdY"
+    const API_KEY = "AIzaSyAMEfr0Ge_MZPTZbNH75kOxQS2sjNuzhdQ"
     const URL = `https:identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`
 
     const requestOptions = {
