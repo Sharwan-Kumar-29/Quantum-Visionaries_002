@@ -6,18 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./dashboard.css">
     <title>Dashboard Quantum Visionaries</title>
+
+    <!-- js code for login sessions  -->
+    <script type="module">
+        // check for a valid idToken in local storage before content load
+        import { checkTokenValidity } from "../src/validateToken.js";
+
+        // check if token is avlailable and valid 
+        const isTokenValid = async function () {
+            const token = localStorage.getItem("authToken")
+            if (token) {
+                const isValid = await checkTokenValidity(token);
+                if (!isValid.status) {
+                    redirectTologin()
+                }
+            }
+            else {
+                console.log("no token")
+                redirectTologin()
+            }
+        }
+        window.addEventListener("load", isTokenValid)
+        function redirectTologin() {
+            window.location.href = `./../signIn/signIn.html`
+        }
+    </script>
 </head>
 
 <body>
     <nav id="navbar">
-        <div id="hamburger-menu" onclick="displaySideNavbar()"><img src="./../src/Assets/images/hamburger-menu.png"
+        <div id="hamburger-menu"><img src="./../src/Assets/images/hamburger-menu.png"
                 alt="hamburger-menu" id="hamburger-menu-icon"></div>
         <a href="./../index.html" id="home-link">
             <div id="nav-logo"><img src="./../src/Assets/logo/logo.png" alt=""> Quantum Visionaries</div>
         </a>
 
         <div id="nav-dashboard"><a>Dashboard</a></div>
-        <div id="nav-user-div"><img src="./../src/Assets/images/user.png" alt="">
+        <div id="nav-user-div"><img src="./../src/Assets/images/user.png" alt="profile-img" id="profile-icon">
             <img src="./../src/Assets/images/dark-mode.png" alt="theme-img" id="theme-image" onclick="changeTheme()">
         </div>
     </nav>
@@ -31,21 +56,22 @@
             <li><a>Dashboard</a></li>
             <li>About Us</li>
             <li>Contact Us</li>
-            <li onclick="logOut()" class="logout">log out</li>
+            <li class="logout" id="logout">log out</li>
 
         </ul>
-        <div id="close-side-bar" onclick="hideSideNavbar()">Close</div>
+        <div id="close-side-bar">Close</div>
     </nav>
 
     <!-- user profile -->
     <div id="user-profile">
-        <div id="user-img"></div>
+        <!-- <div id="user-img"></div> -->
         <div id="user-details"></div>
+        
     </div>
     <main>
         <section id="new-design">
             <div>
-                <p>New whiteboard</p>
+                <p class="section-headings">New whiteboard</p>
                 <div class="design-options">
                     <div id="blank-whiteboard">
                         <div><img src="./../src/Assets/images/plus.png" alt="blank whiteboard"></div>
@@ -58,21 +84,33 @@
                 </div>
             </div>
         </section>
-        <section id="recent-designs" style="height: 500px;">
-            <div>
-                <p>Recent whiteboards</p>
-                <div class="design-options" id="recent-whiteboards">
-
+        <section id="recent-designs">
+            <div class="search-recent-whiteboards">
+                <p class="section-headings">Recent whiteboards</p>
+                <div>
+                    <input type="text" id="search-whiteboards" placeholder="Search your projects">
+                    <select id="sort-whiteboards">
+                        <option value="date-desc" selected>Most recent</option>
+                        <option value="date-asc">Old first</option>
+                        <option value="name-asc">Name: A-Z</option>
+                        <option value="name-desc">Name: Z-A</option>
+                    </select>
                 </div>
             </div>
+            <div>
+
+                <div id="recent-whiteboards"></div>
+            </div>
         </section>
+        <div id="no-whiteboards-message">Start creating your first design!</div>
 
     </main>
     <div id="create-new-whiteboard">
         <h1>Whiteboard details </h1>
-        <div>
+        <div id="project-naming">
             <label class="label">Project name<span class="mandatory">*</span></label>
             <input type="text" id="whiteboard-name">
+            <p id="project-name-taken-message">Name already in use, try another name</p>
         </div>
         <div>
             <button id="cancel-new-wb">Cancel</button>
@@ -82,4 +120,4 @@
 </body>
 
 </html>
-<script src="./dashboard.js"></script>
+<script src="./dashboard.js" type="module"></script>
