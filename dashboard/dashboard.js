@@ -2,16 +2,16 @@ import { getUserId } from "../src/validateToken.js"
 
 
 // stores the whiteboards saved by user in firebase 
-let whiteboards = []
+let whiteboards;
 let userId;
 
 // get user id from google authentication api request 
 async function getUserData() {
+    console.log("getting user data")
     const token = localStorage.getItem("authToken")
     const res = await getUserId(token)
     if (res.value) {
         userId = res.value;
-        console.log(res.value)
         fetchWhiteboards(res.value)
     }
     else {
@@ -25,8 +25,8 @@ getUserData()
 
 // fetch whiteboards stored in firebase for specific user 
 async function fetchWhiteboards(userId) {
-    const API_KEY = "AIzaSyD4sqsxSpMI58pH2DimueULkR_PCVWEUdY"
-    const URL = `https://user-authentication-ebb7d-default-rtdb.firebaseio.com/users/${userId}/whiteboards.json`
+
+    const URL = `https://quantum-visionaries-002-default-rtdb.firebaseio.com/users/${userId}/whiteboards.json`
 
     try {
         let resp = await fetch(URL)
@@ -34,9 +34,10 @@ async function fetchWhiteboards(userId) {
             let res = await resp.json()
             // if user saved some whiteboards
             if (res) {
-                console.log("fetched whiteboard", res)
                 whiteboards = res
-                displayRecentWhiteboards(whiteboards)
+
+                // sort and display the sorted whiteboards
+                sortRecentWhiteboards()
             }
             // if user do not save any whiteboards
             else {
@@ -59,8 +60,12 @@ async function fetchWhiteboards(userId) {
 function displayRecentWhiteboards(whiteboards) {
 
     let recentWhiteboards = document.getElementById("recent-whiteboards")
-    console.log(whiteboards)
+    recentWhiteboards.innerHTML = ""
+
     if (whiteboards) {
+        document.getElementById("no-whiteboards-message").style.display = "none"
+        document.getElementById("search-whiteboards").style.display = "block";
+        document.getElementById("sort-whiteboards").style.display = "block";
         // iterate through each whiteboards
         for (let whiteboard in whiteboards) {
 
@@ -79,29 +84,83 @@ function displayRecentWhiteboards(whiteboards) {
 
             let details = document.createElement("div")
             details.innerHTML = `
-            <p>${whiteboard}</p>`
+            <p>${whiteboard}</p>
+            `
+            let deleteIconDiv = document.createElement("div")
+            deleteIconDiv.classList.add("delete-icon")
 
-            newDiv.append(imgDiv, details)
-            newDiv.classList.add("recent-whiteboards")
+            deleteIconDiv.innerHTML = `<img src="./../src/Assets/images/trash.png">`
+
+            newDiv.append(imgDiv, details,deleteIconDiv)
+            newDiv.classList.add("recent-whiteboards-cards")
+
+            deleteIconDiv.addEventListener("click", (event)=>{
+                event.stopPropagation()
+                const value = confirm(`Do you want to delete the whiteboard, this is permanent and can't be undone`)
+                if(value){
+                    deleteWhiteboard(whiteboard);
+                }
+            })
             // append data on web page 
-            recentWhiteboards.appendChild(newDiv)
+            recentWhiteboards.append(newDiv)
             newDiv.addEventListener('click', () => {
                 window.location.href = `./../whiteboard/home.html?u=${userId}&ep=${whiteboard}`
             })
+
+            newDiv.addEventListener("mouseenter",()=>{
+                deleteIconDiv.style.display = "block"
+            })
+            newDiv.addEventListener("mouseleave",()=>{
+                deleteIconDiv.style.display = "none"
+            })
+
         }
     }
     else {
-        // console.log(whiteboards)
+        document.getElementById("search-whiteboards").style.display = "none";
+        document.getElementById("sort-whiteboards").style.display = "none";
+        document.getElementById("no-whiteboards-message").style.display = "block"
     }
 }
 
 
+// delete whiteboard 
+async function deleteWhiteboard(whiteboard){
+    console.log(whiteboard)
+    whiteboards = Object.keys(whiteboards).filter(key => key!==whiteboard).reduce((acc, key)=>{
+        acc[key] = whiteboards[key];
+        return acc;
+    },{})
+
+    // deleteWhiteboard from firebase 
+    const URL = `https://quantum-visionaries-002-default-rtdb.firebaseio.com/users/${userId}/whiteboards/${whiteboard}.json`
+
+    const requestOptions = {
+        method : "DELETE",
+        redirect: "follow"
+    }
+
+    try{
+        let resp = await fetch(URL, requestOptions)
+        if(resp.ok){
+            displayRecentWhiteboards(whiteboards)
+        }
+        else{
+            let err = await resp.json()
+            alert(err.error.message)
+        }
+    }
+    catch(err){
+        console.log(err)
+        alert(err.error.message)
+    }
+
+}
 
 
 
 // side navbar for small width screen  
 function displaySideNavbar() {
-    console.log("clicked")
     let sideNav = document.getElementById("side-nav")
 
     sideNav.style.display = "block";
@@ -138,13 +197,14 @@ blankWhiteboard.addEventListener("click", () => {
 document.getElementById("cancel-new-wb").addEventListener("click", () => {
     document.getElementById("create-new-whiteboard").style.display = "none";
     document.querySelector("main").classList.remove("blur", "no-pointer-events")
+    document.getElementById("whiteboard-name").value = ""
 })
 
 
 // validate the name and go for new whiteboard
 document.getElementById("create-new-wb").addEventListener("click", validateWhiteboardName)
-    
-function validateWhiteboardName(){
+
+function validateWhiteboardName() {
     let nameInput = document.getElementById("whiteboard-name")
 
     const newWhiteboard = nameInput.value.trim()
@@ -169,7 +229,6 @@ function validateWhiteboardName(){
 
 // redirect user to blank whiteboard
 function redirectToNewWhiteBoard(whiteboardName) {
-    console.log("redirecting")
     window.location.href = `./../whiteboard/home.html?u=${userId}&p=${whiteboardName}`
 }
 
@@ -200,6 +259,8 @@ theme.onclick = function () {
 }
 
 
+
+
 // redirect the user 
 function redirectTologin() {
     window.location.href = `./../signIn/signIn.html`
@@ -212,4 +273,81 @@ function logOut() {
 }
 
 
+// debounce search
+const debounce = function () {
+    let timeout;
+    return function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => searchRecentWhiteboards(whiteboards), 500);
+    };
+}
 
+// searching functionality for recent whiteboards 
+const searchRecentWhiteboards = function (whiteboardContainer) {
+    // if any designs are saved 
+    let searchedText = searchInput.value
+    if (whiteboardContainer) {
+        const container = {}
+        for (let whiteboard in whiteboardContainer) {
+            if(whiteboard.includes(searchedText))
+                container[whiteboard] = whiteboardContainer[whiteboard]
+        }
+        displayRecentWhiteboards(container)
+    }
+    else{
+        return
+    }
+}
+
+// search input
+let searchInput = document.getElementById("search-whiteboards")
+// search input for searching saved whiteboards
+searchInput.addEventListener("input", debounce())
+
+
+
+
+// // sorting the whiteboards based on name and data created
+let sortWhiteboards = document.getElementById("sort-whiteboards")
+sortWhiteboards.addEventListener("change", sortRecentWhiteboards)
+
+// Sort recent whiteboards
+function sortRecentWhiteboards() {
+    const sortBy = sortWhiteboards.value;
+    let copyWhiteboard = {...whiteboards}
+
+    console.log(copyWhiteboard)
+    if (sortBy === "name-asc") {
+        copyWhiteboard = Object.keys(copyWhiteboard).sort().reduce((obj, key) => {
+                obj[key] = copyWhiteboard[key];
+                return obj;
+            }, {});
+    } else if (sortBy === "name-desc") {
+        // Sort by name in descending order
+        copyWhiteboard = Object.keys(copyWhiteboard).sort().reverse().reduce((obj, key) => {
+                obj[key] = copyWhiteboard[key];
+                return obj;
+            }, {});
+    } else if (sortBy === "date-asc") {
+        // Sort by date created in ascending order
+        copyWhiteboard = Object.keys(copyWhiteboard).sort((a, b) => new Date(copyWhiteboard[a].timestamp) - new Date(copyWhiteboard[b].timestamp)).reduce((obj, key) => {
+                obj[key] = copyWhiteboard[key];
+                return obj;
+            }, {});
+    } else if (sortBy === "date-desc") {
+        // Sort by date created in descending order
+        copyWhiteboard = Object.keys(copyWhiteboard).sort((a, b) => new Date(copyWhiteboard[b].timestamp) - new Date(copyWhiteboard[a].timestamp))
+            .reduce((obj, key) => {
+                obj[key] = copyWhiteboard[key];
+                return obj;
+            }, {});
+    }
+    if(searchInput.value === ""){
+        // Display the sorted whiteboards
+        displayRecentWhiteboards(copyWhiteboard);
+    }
+    else{
+        // first search and then display 
+        searchRecentWhiteboards(copyWhiteboard)
+    }
+}

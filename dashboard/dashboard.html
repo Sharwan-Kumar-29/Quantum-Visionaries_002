@@ -70,7 +70,7 @@
     <main>
         <section id="new-design">
             <div>
-                <p>New whiteboard</p>
+                <p class="section-headings">New whiteboard</p>
                 <div class="design-options">
                     <div id="blank-whiteboard">
                         <div><img src="./../src/Assets/images/plus.png" alt="blank whiteboard"></div>
@@ -84,11 +84,24 @@
             </div>
         </section>
         <section id="recent-designs">
+            <div class="search-recent-whiteboards">
+                <p class="section-headings">Recent whiteboards</p>
+                <div>
+                    <input type="text" id="search-whiteboards" placeholder="Search your projects">
+                    <select id="sort-whiteboards">
+                        <option value="date-desc" selected>Most recent</option>
+                        <option value="date-asc">Old first</option>
+                        <option value="name-asc">Name: A-Z</option>
+                        <option value="name-desc">Name: Z-A</option>
+                    </select>
+                </div>
+            </div>
             <div>
-                <p>Recent whiteboards</p>
+
                 <div id="recent-whiteboards"></div>
             </div>
         </section>
+        <div id="no-whiteboards-message">Start creating your first design!</div>
 
     </main>
     <div id="create-new-whiteboard">
