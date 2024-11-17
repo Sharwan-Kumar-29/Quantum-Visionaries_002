@@ -159,6 +159,10 @@ a {
     color: black;
 }
 
+#user-details>div{
+    cursor: pointer;
+}
+
 /* white board options  */
 section {
     width: 100%;

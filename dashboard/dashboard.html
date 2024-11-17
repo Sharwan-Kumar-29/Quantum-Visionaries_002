@@ -6,31 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./dashboard.css">
     <title>Dashboard Quantum Visionaries</title>
-
-    <!-- js code for login sessions  -->
-    <script type="module">
-        // check for a valid idToken in local storage before content load
-        import { checkTokenValidity } from "../src/validateToken.js";
-
-        // check if token is avlailable and valid 
-        const isTokenValid = async function () {
-            const token = localStorage.getItem("authToken")
-            if (token) {
-                const isValid = await checkTokenValidity(token);
-                if (!isValid.status) {
-                    redirectTologin()
-                }
-            }
-            else {
-                console.log("no token")
-                redirectTologin()
-            }
-        }
-        window.addEventListener("load", isTokenValid)
-        function redirectTologin() {
-            window.location.href = `./../signIn/signIn.html`
-        }
-    </script>
 </head>
 
 <body>
@@ -117,7 +92,50 @@
             <button id="create-new-wb">Create</button>
         </div>
     </div>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyAMEfr0Ge_MZPTZbNH75kOxQS2sjNuzhdQ",
+          authDomain: "quantum-visionaries-002.firebaseapp.com",
+          databaseURL: "https://quantum-visionaries-002-default-rtdb.firebaseio.com",
+          projectId: "quantum-visionaries-002",
+          storageBucket: "quantum-visionaries-002.firebasestorage.app",
+          messagingSenderId: "157756351753",
+          appId: "1:157756351753:web:46bad66908983864965fd8"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+      </script>
 </body>
+<!-- js code for login sessions  -->
+<script type="module">
+    // check for a valid idToken in local storage before content load
+    import { checkTokenValidity } from "../src/validateToken.js";
 
+    // check if token is avlailable and valid 
+    const isTokenValid = async function () {
+        const token = localStorage.getItem("authToken")
+        if (token) {
+            const isValid = await checkTokenValidity(token);
+            if (!isValid.status) {
+                redirectTologin()
+            }
+        }
+        else {
+            console.log("no token")
+            redirectTologin()
+        }
+    }
+    window.addEventListener("load", isTokenValid)
+    function redirectTologin() {
+        window.location.href = `./../signIn/signIn.html`
+    }
+</script>
 </html>
 <script src="./dashboard.js" type="module"></script>
