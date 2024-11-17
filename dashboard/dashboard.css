@@ -85,9 +85,9 @@ a {
 /* side nav bar for small screen  */
 #side-nav {
     display: none;
-    width: 80%;
+    width: 100%;
     height: 100%;
-    background-color: var(--primary-background);
+    background-color: var(--nav-background);
     position: fixed;
     top: 0;
     left: 0;

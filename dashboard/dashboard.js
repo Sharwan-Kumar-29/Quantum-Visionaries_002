@@ -158,11 +158,10 @@ async function deleteWhiteboard(whiteboard){
 }
 
 
-
+document.getElementById("hamburger-menu").addEventListener("click", displaySideNavbar)
 // side navbar for small width screen  
 function displaySideNavbar() {
     let sideNav = document.getElementById("side-nav")
-
     sideNav.style.display = "block";
 }
 function hideSideNavbar() {
@@ -172,13 +171,28 @@ function hideSideNavbar() {
 
 // hide side navbar for mid and large screen size 
 window.addEventListener("resize", () => {
-    const sideNav = document.getElementById("side-nav")
-
     let width = window.innerWidth;
     if (width > 480) {
-        sideNav.style.display = "none"
+        hideSideNavbar()
     }
 })
+
+
+// close side navbar 
+document.getElementById("close-side-bar").addEventListener("click", ()=>{
+    document.getElementById("side-nav").style.display = "none"
+})
+
+// log out the user 
+function logout() {
+    console.log(true)
+    localStorage.removeItem("authToken")
+    window.location.href = `./../index.html`
+}
+// logout from side navbar
+document.getElementById("logout").addEventListener("click", logout)
+
+
 
 
 
@@ -265,13 +279,6 @@ theme.onclick = function () {
 function redirectTologin() {
     window.location.href = `./../signIn/signIn.html`
 }
-
-// log out the user 
-function logOut() {
-    localStorage.removeItem("authToken")
-    window.location.href = `./../index.html`
-}
-
 
 // debounce search
 const debounce = function () {
