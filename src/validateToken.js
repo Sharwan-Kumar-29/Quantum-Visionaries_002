@@ -29,3 +29,34 @@ export async function checkTokenValidity(token) {
     }
 
 }
+
+export async function getUserId(token) {
+    const API_KEY = "AIzaSyD4sqsxSpMI58pH2DimueULkR_PCVWEUdY"
+    const URL = `https:identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`
+
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ idToken: token })
+    }
+    try {
+        // fetch users data
+        let resp = await fetch(URL, requestOptions)
+        if (resp.ok) {
+            // user id found
+            const res = await resp.json()
+            return {value: res.users[0].localId}
+        }
+        else {
+            // No user id obtained
+            return {value: false}
+
+        }
+    } catch (error) {
+        console.log("Error getting users id", error)
+        return {value: false}
+    }
+
+}

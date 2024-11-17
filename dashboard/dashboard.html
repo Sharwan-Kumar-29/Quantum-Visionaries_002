@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./dashboard.css">
     <title>Dashboard Quantum Visionaries</title>
-    <!-- check for a valid idToken in local storage before content load-->
+
+    <!-- js code for login sessions  -->
     <script type="module">
+        // check for a valid idToken in local storage before content load
         import { checkTokenValidity } from "../src/validateToken.js";
+
         // check if token is avlailable and valid 
         const isTokenValid = async function () {
             const token = localStorage.getItem("authToken")
@@ -80,21 +83,20 @@
                 </div>
             </div>
         </section>
-        <section id="recent-designs" style="height: 500px;">
+        <section id="recent-designs">
             <div>
                 <p>Recent whiteboards</p>
-                <div class="design-options" id="recent-whiteboards">
-
-                </div>
+                <div id="recent-whiteboards"></div>
             </div>
         </section>
 
     </main>
     <div id="create-new-whiteboard">
         <h1>Whiteboard details </h1>
-        <div>
+        <div id="project-naming">
             <label class="label">Project name<span class="mandatory">*</span></label>
             <input type="text" id="whiteboard-name">
+            <p id="project-name-taken-message">Name already in use, try another name</p>
         </div>
         <div>
             <button id="cancel-new-wb">Cancel</button>
@@ -104,4 +106,4 @@
 </body>
 
 </html>
-<script src="./dashboard.js"></script>
+<script src="./dashboard.js" type="module"></script>
