@@ -675,9 +675,6 @@ function toggleTheme() {
         themeIcon.classList.add("fa-sun");
     }
 }
-function display(){
-    
-}
 
 //Initializes the canvas and loads saved data on page load
 window.onload = () => {

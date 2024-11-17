@@ -137,12 +137,13 @@ textarea {
     z-index: 1000;
 }
 
-/* .saved-files {
+.saved-files {
     margin-left: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-} */
+}
+
 
 .file-thumbnail {
     border: 1px solid rgb(169, 164, 164);
@@ -187,7 +188,7 @@ Style for the dropdown button (showing the arrow)
     display: none;
     position: absolute;
     top: 70px;
-    right: 9em;
+    right: 10em;
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 6em;
@@ -274,14 +275,14 @@ input[type="file"] {
 
 /* Style the range slider */
 #brushSizeSlider {
-    margin-top: 0.5em;
+    margin-top: 1em;
     color: orange;
     background-color: #000;
     width: 6em;
     display: none; /* Initially hidden */
     position: absolute;
     top: 5em;
-    right: 20em;
+    right: 23em;
 }
 
 .Parallelogram{
@@ -371,5 +372,4 @@ body.night-mode .theme-toggle {
     font-size: 14px;
     font-family: Arial, sans-serif;
 }
-
 
