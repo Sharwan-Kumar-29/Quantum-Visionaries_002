@@ -1,7 +1,7 @@
 
 // Firebase database URL
 // const databaseURL = "https://whiteboard-5795a-default-rtdb.firebaseio.com";
-const databaseURL ="https://quantum-visionaries-002-default-rtdb.firebaseio.com";
+const databaseURL = "https://quantum-visionaries-002-default-rtdb.firebaseio.com";
 
 // getting elements
 const canvas = document.getElementById("whiteboard");
@@ -72,7 +72,7 @@ function stopInteraction() {
 
     if (mode === 'pen' || mode === 'eraser') {
         ctx.closePath();
-    } else if (mode === 'line' || mode === 'circle' || mode === 'rectangle' || mode === 'ellipse' || mode === 'diamond'|| mode === 'parallelogram' || mode === 'triangle') {
+    } else if (mode === 'line' || mode === 'circle' || mode === 'rectangle' || mode === 'ellipse' || mode === 'diamond' || mode === 'parallelogram' || mode === 'triangle') {
         drawShape();
     } else if (mode === 'arrow') {
         drawArrow();
@@ -438,8 +438,15 @@ function redrawCanvas() {
 }
 
 
+
+console.log(userId, whiteboardId)
 // Saves the canvas and notes to Firebase
 async function saveToFirebase() {
+
+    const URL = window.location.search
+    const params = new URLSearchParams(URL)
+    const userId = params.get("u")
+    const whiteboardId = params.get("p") || params.get("ep")
     const notes = document.getElementById("notes").value;
     const drawingData = canvas.toDataURL();
     const data = {
@@ -449,8 +456,8 @@ async function saveToFirebase() {
     };
 
     try {
-        const response = await fetch(`${databaseURL}/whiteboard_data.json`, {
-            method: "POST",
+        const response = await fetch(`${databaseURL}/users/${userId}/whiteboards/${whiteboardId}.json`, {
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -662,7 +669,7 @@ function downloadPDF() {
 function toggleTheme() {
     const body = document.body;
     const themeIcon = document.getElementById("themeIcon");
-    
+
     // Toggle the night mode class on the body
     body.classList.toggle("night-mode");
 
