@@ -11,7 +11,7 @@ const toolbar = document.getElementById("toolbar");
 //canvas width and height
 canvas.width = 1100;
 canvas.height = 800;
-let img=null;
+
 notes.style.display = "none";
 let isDrawing = false;
 let mode = "pen";  // Default mode
@@ -368,10 +368,7 @@ function clearCanvas() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     undoStack = [];
     redoStack = [];
-    // Redraw all images
-    images.forEach(img => {
-        ctx.drawImage(img.image, img.x, img.y, img.width, img.height);
-    });
+
 }
 
 // Saves the current canvas state for undo/redo
@@ -439,6 +436,7 @@ function redrawCanvas() {
         ctx.stroke();
     });
 }
+
 
 // Saves the canvas and notes to Firebase
 async function saveToFirebase() {
@@ -678,7 +676,7 @@ function toggleTheme() {
     }
 }
 
-function display(){}
+
 //Initializes the canvas and loads saved data on page load
 window.onload = () => {
     saveCanvasState();
