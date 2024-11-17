@@ -33,6 +33,7 @@
 
 <body>
     <div class="toolbar">
+        
         <!-- Toolbar with drawing options and controls -->
         <button data-tooltip="Pen" onclick="setMode('pen')"><i class="fi fi-ts-drawer-alt"></i></button>
         <button data-tooltip="Line" onclick="setMode('line')"><i class="fi fi-bs-slash"></i></button>
@@ -43,7 +44,7 @@
         <button data-tooltip="Arrow" onclick="setMode('arrow')"><i class="fi fi-bs-arrow-up-right"></i></button>
         <button data-tooltip="Oval" onclick="setMode('ellipse')"><i class="fi fi-rr-oval"></i></button>
         <button data-tooltip="Diamond" onclick="setMode('diamond')"><i class="fa-sharp fa-solid fa-diamond"></i></button>
-        <button data-tooltip="Parallelogram" onclick="setMode('parallelogram')"><i class="fi fi-rr-slash"></i></button>
+        <button data-tooltip="Parallelogram" onclick="setMode('parallelogram')"><img src="parallelogram.png" alt="Parallelogram" id="parallelogram"></button>
         <button data-tooltip="Enter text" onclick="setMode('text')"><i class="fi fi-ts-text-box"></i></button>
         <button data-tooltip="Erase" onclick="setMode('erase')"><i class="fi fi-rs-eraser"></i></button>
         <button data-tooltip="Clear" onclick="clearCanvas()"><i class="fi fi-bs-trash"></i></button>
@@ -59,7 +60,7 @@
             <button onclick="setBackgroundColor('#ffffff')">White</button>
             <button onclick="setBackgroundColor('#000000')">Black</button>
         </div>
-<!-- <button></button> -->
+
         <button data-tooltip="Save to firebase" onclick="saveToFirebase()"><i class="fa-solid fa-cloud-arrow-up"></i></button>
         <input type="color" class="colorPicker" id="colorPicker" onchange="setColor(this.value)">
         <!-- Button to toggle slider visibility -->
@@ -82,7 +83,9 @@
             </div>
         </div>
 
-
+        <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">
+            <i class="fa-solid fa-sun" id="themeIcon"></i>
+        </button>
 
 
     </div>
@@ -96,3 +99,66 @@
 </body>
 
 </html>
+<script>
+    // home.js or inside a <script> tag in home.html
+window.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const whiteboardKey = urlParams.get("key"); // Extract 'key' from the URL
+
+    if (whiteboardKey) {
+        loadWhiteboardData(whiteboardKey);
+    }
+});
+
+// Function to load whiteboard data based on the key
+async function loadWhiteboardData(key) {
+    try {
+        const response = await fetch(`${databaseURL}/whiteboard_data.json`);
+        if (!response.ok) throw new Error(`Failed to fetch data: ${response.status}`);
+        
+        const data = await response.json();
+        const entry = data[key];
+
+        if (entry) {
+            loadFile(entry.drawing, entry.notes, entry.backgroundColor, entry.images); // Use the data to load the whiteboard
+        } else {
+            alert("Whiteboard not found.");
+        }
+    } catch (error) {
+        console.error("Error loading whiteboard data:", error);
+    }
+}
+
+// Function to load the file into the whiteboard
+function loadFile(drawingData, notes, backgroundColor, images) {
+    const canvas = document.getElementById("whiteboard");
+    const ctx = canvas.getContext("2d");
+
+    // Load the drawing data
+    const img = new Image();
+    img.onload = () => {
+        clearCanvas(ctx);
+        ctx.drawImage(img, 0, 0); // Redraw saved image
+    };
+    img.src = drawingData;
+
+    // Set the background color
+    canvas.style.backgroundColor = backgroundColor || "#ffffff";
+
+    // Load additional images
+    images.forEach(({ image, x, y, width, height }) => {
+        const imgElem = new Image();
+        imgElem.onload = () => ctx.drawImage(imgElem, x, y, width, height);
+        imgElem.src = image;
+    });
+
+    // Load notes if present
+    document.getElementById("notes").value = notes || "";
+}
+
+// Clear canvas utility
+function clearCanvas(ctx) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+</script>

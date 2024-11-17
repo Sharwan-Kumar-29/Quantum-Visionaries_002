@@ -42,8 +42,8 @@ button[data-tooltip]:hover::after {
 }
 
 button{
-    width: 40px;
-    height: 40px;
+    width: 2.5em;
+    height: 2.5em;
     border-radius: 5px;
     border: none;
     color: white;
@@ -63,15 +63,16 @@ button:hover{
 .toolbar {
     background-color: #ffffff; /* Solid background color */
     top: 0;
-    position: fixed;
+    position: relative;
     width: 100%;
     height: 60px; 
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: 20px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-    padding: 20px;
+    padding: 10px;
     z-index: 1000;
 }
 
@@ -84,7 +85,7 @@ font-size: 30px;
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top:100px;
+    margin-top:1em;
 }
 
 .saved-files{
@@ -102,10 +103,10 @@ h3{
 
 }
 canvas {
-    width: 75%;
+    width: 73%;
     border: 1px solid #8a8686;
     cursor: crosshair;
-    margin-right: 10px;
+    margin: 10px;
 }
 
 .resize-handle {
@@ -143,6 +144,7 @@ textarea {
     align-items: center;
 }
 
+
 .file-thumbnail {
     border: 1px solid rgb(169, 164, 164);
     width: 80%;
@@ -162,16 +164,15 @@ textarea {
 }
 
 /* Style for the download button with the arrow */
-.download-btn {
+/* .download-btn {
     position: relative;
-    width: 70px;
-    right: 20px;
-    left: 110px;
-
+    width: 4em;
+    right: 3em;
+    left: 5em;
     padding-right: 20px; 
-}
-
-/* Style for the dropdown button (showing the arrow) */
+} */
+/* 
+Style for the dropdown button (showing the arrow)
 .download-btn::after {
     content: '▼';
     font-size: 14px;
@@ -180,15 +181,14 @@ textarea {
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
-}
+} */
 
 /* Hide the download options initially */
 .download-options {
     display: none;
     position: absolute;
     top: 70px;
-    right: 3em;
-
+    right: 10em;
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 6em;
@@ -230,7 +230,7 @@ input[type="file"] {
     position: absolute;
     top: 1em;
     width: 6em;
-    margin-top: -13em;
+    /* margin-top: -13em; */
     left: 0;
     border: 1px solid #ccc;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -283,5 +283,93 @@ input[type="file"] {
     position: absolute;
     top: 5em;
     right: 23em;
+}
+
+.Parallelogram{
+    width: 50px;
+    height: 50px;
+}
+
+/* General Styles for Theme Toggle Button */ 
+.theme-toggle {
+    position: absolute;
+    right: 2em;
+    width: 1.6em;
+    height: 1.6em;
+    background-color: rgb(244, 126, 9);
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333; /* Default color for day mode*/
+}
+
+/* Night Mode Styles */
+body.night-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+body.night-mode .toolbar {
+    background-color: #525151;
+    color: #fff;
+}
+
+body.night-mode canvas {
+    background-color: #1e1e1e;
+}
+
+body.night-mode .theme-toggle {
+    color: #ffd700; /* Bright color for night mode */
+}
+
+
+/* Media Query for Small Screens */
+@media (max-width: 768px) {
+    .toolbar {
+        flex-direction: column; /* Stack items vertically */
+        position: absolute;
+        left: 0; /* Align toolbar to the left side */
+        top: 0; /* Start from the top */
+        height: 100%; /* Fill the screen vertically */
+        width: 60px; /* Narrow width for a compact toolbar */
+        background-color: #f5f5f5;
+        overflow-y: auto; /* Add scroll if content overflows */
+        gap: 5px;
+    }
+
+    .toolbar button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%; /* Full width for buttons */
+        margin: 0; /* Remove additional margins */
+        height: 50px; /* Uniform height for better alignment */
+    }
+
+    /* Adjust canvas and notes area to avoid overlapping */
+    .container {
+        margin-left: 60px; /* Add space for the toolbar */
+    }
+}
+
+/* Styling for the whiteboard canvas */
+#whiteboard-canvas {
+    border: 2px solid #ddd; /* Light border around the canvas */
+    border-radius: 10px;
+    width: 100%;
+    height: 500px;
+    background-color: #ffffff; /* Default background color */
+}
+
+/* Styling for the notes section */
+#notes {
+    width: 100%;
+    height: 100px;
+    margin-top: 20px;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
 }
 
