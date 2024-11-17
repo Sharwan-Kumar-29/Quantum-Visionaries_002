@@ -12,7 +12,7 @@ Frontend
 - **Database**: Firebase  
 
 ## Directory Structure  
-─Quantum-Visionaries_002
+Quantum-Visionaries_002
     ├───.github
     │   └───workflows
     ├───dashboard
