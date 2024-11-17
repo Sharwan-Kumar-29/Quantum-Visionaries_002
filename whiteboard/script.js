@@ -1,7 +1,6 @@
 
 // Firebase database URL
-// const databaseURL = "https://whiteboard-5795a-default-rtdb.firebaseio.com";
-const databaseURL ="https://quantum-visionaries-002-default-rtdb.firebaseio.com";
+const databaseURL = "https://whiteboard-5795a-default-rtdb.firebaseio.com";
 
 // getting elements
 const canvas = document.getElementById("whiteboard");
@@ -661,22 +660,6 @@ function downloadPDF() {
     doc.save('whiteboard.pdf');
 }
 
-function toggleTheme() {
-    const body = document.body;
-    const themeIcon = document.getElementById("themeIcon");
-    
-    // Toggle the night mode class on the body
-    body.classList.toggle("night-mode");
-
-    // Update the icon based on the theme
-    if (body.classList.contains("night-mode")) {
-        themeIcon.classList.remove("fa-sun");
-        themeIcon.classList.add("fa-moon");
-    } else {
-        themeIcon.classList.remove("fa-moon");
-        themeIcon.classList.add("fa-sun");
-    }
-}
 
 
 //Initializes the canvas and loads saved data on page load
@@ -686,6 +669,3 @@ window.onload = () => {
 
     document.getElementById("whiteboard").style.display = "block";
 };
-
-// load data of previous white board
-
