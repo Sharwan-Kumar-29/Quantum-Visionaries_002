@@ -438,8 +438,6 @@ function redrawCanvas() {
 }
 
 
-
-console.log(userId, whiteboardId)
 // Saves the canvas and notes to Firebase
 async function saveToFirebase() {
 

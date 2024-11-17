@@ -121,7 +121,8 @@
 
     // Function to load whiteboard data based on the key
     async function loadWhiteboardData(key) {
-        console.log(key)
+        let params = new URLSearchParams(window.location.search)
+        let userId = params.get("u")
         try {
             const response = await fetch(`${databaseURL}/users/${userId}/whiteboards/${key}.json`);
             if (!response.ok) throw new Error(`Failed to fetch data: ${response.status}`);
