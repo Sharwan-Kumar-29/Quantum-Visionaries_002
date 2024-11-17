@@ -678,7 +678,9 @@ function toggleTheme() {
     }
 }
 
-
+function display(){
+    
+}
 //Initializes the canvas and loads saved data on page load
 window.onload = () => {
     saveCanvasState();
