@@ -1,6 +1,7 @@
 
 // Firebase database URL
-const databaseURL = "https://whiteboard-5795a-default-rtdb.firebaseio.com";
+// const databaseURL = "https://whiteboard-5795a-default-rtdb.firebaseio.com";
+const databaseURL ="https://quantum-visionaries-002-default-rtdb.firebaseio.com";
 
 // getting elements
 const canvas = document.getElementById("whiteboard");
@@ -643,3 +644,6 @@ window.onload = () => {
 
     document.getElementById("whiteboard").style.display = "block";
 };
+
+// load data of previous white board
+
