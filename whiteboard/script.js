@@ -388,6 +388,16 @@ function undo() {
     }
 }
 
+// Restores the canvas state from a saved data URL
+function restoreCanvasState(state) {
+    const img = new Image();
+    img.src = state;
+    img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+    };
+}
+
 // Redo the last undone action
 function redo() {
     if (redoStack.length > 0) {
