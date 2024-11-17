@@ -1,6 +1,7 @@
 
 // Firebase database URL
-const databaseURL = "https://whiteboard-5795a-default-rtdb.firebaseio.com";
+// const databaseURL = "https://whiteboard-5795a-default-rtdb.firebaseio.com";
+const databaseURL ="https://quantum-visionaries-002-default-rtdb.firebaseio.com";
 
 // getting elements
 const canvas = document.getElementById("whiteboard");
@@ -10,7 +11,7 @@ const toolbar = document.getElementById("toolbar");
 //canvas width and height
 canvas.width = 1100;
 canvas.height = 800;
-let img=null;
+
 notes.style.display = "none";
 let isDrawing = false;
 let mode = "pen";  // Default mode
@@ -367,10 +368,7 @@ function clearCanvas() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     undoStack = [];
     redoStack = [];
-    // Redraw all images
-    images.forEach(img => {
-        ctx.drawImage(img.image, img.x, img.y, img.width, img.height);
-    });
+
 }
 
 // Saves the current canvas state for undo/redo
@@ -438,6 +436,7 @@ function redrawCanvas() {
         ctx.stroke();
     });
 }
+
 
 // Saves the canvas and notes to Firebase
 async function saveToFirebase() {
@@ -660,7 +659,25 @@ function downloadPDF() {
     doc.save('whiteboard.pdf');
 }
 
+function toggleTheme() {
+    const body = document.body;
+    const themeIcon = document.getElementById("themeIcon");
+    
+    // Toggle the night mode class on the body
+    body.classList.toggle("night-mode");
 
+    // Update the icon based on the theme
+    if (body.classList.contains("night-mode")) {
+        themeIcon.classList.remove("fa-sun");
+        themeIcon.classList.add("fa-moon");
+    } else {
+        themeIcon.classList.remove("fa-moon");
+        themeIcon.classList.add("fa-sun");
+    }
+}
+function display(){
+    
+}
 
 //Initializes the canvas and loads saved data on page load
 window.onload = () => {
@@ -669,3 +686,6 @@ window.onload = () => {
 
     document.getElementById("whiteboard").style.display = "block";
 };
+
+// load data of previous white board
+
