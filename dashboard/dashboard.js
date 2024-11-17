@@ -9,9 +9,9 @@ let userId;
 async function getUserData() {
     const token = localStorage.getItem("authToken")
     const res = await getUserId(token)
-    if (res.value) {
-        userId = res.value;
-        fetchWhiteboards(res.value)
+    if (res.status) {
+        userId = res.userId;
+        fetchWhiteboards(userId)
         fetchUserData(userId)
     }
     else {
@@ -35,7 +35,6 @@ async function fetchWhiteboards(userId) {
             // if user saved some whiteboards
             if (res) {
                 whiteboards = res
-
                 // sort and display the sorted whiteboards
                 sortRecentWhiteboards()
             }

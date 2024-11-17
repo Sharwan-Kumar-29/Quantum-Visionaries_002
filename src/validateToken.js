@@ -30,9 +30,10 @@ export async function checkTokenValidity(token) {
 
 }
 
+// get user id 
 export async function getUserId(token) {
-    const API_KEY = "AIzaSyAMEfr0Ge_MZPTZbNH75kOxQS2sjNuzhdQ"
-    const URL = `https:identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`
+    const API_KEY = "AIzaSyAMEfr0Ge_MZPTZbNH75kOxQS2sjNuzhdQ";
+    const URL = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`;
 
     const requestOptions = {
         method: "POST",
@@ -40,23 +41,30 @@ export async function getUserId(token) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({ idToken: token })
-    }
+    };
+
     try {
-        // fetch users data
-        let resp = await fetch(URL, requestOptions)
+        // fetch user's data from Firebase Auth API
+        let resp = await fetch(URL, requestOptions);
+        
         if (resp.ok) {
             // user id found
-            const res = await resp.json()
-            return {value: res.users[0].localId}
-        }
-        else {
-            // No user id obtained
-            return {value: false}
-
+            const res = await resp.json();
+            
+            if (res.users && res.users.length > 0) {
+                return { status: true, userId: res.users[0].localId };
+            } else {
+                console.error("No users found in the response", res);
+                return { status: false, error: "No users found" };
+            }
+        } else {
+            // Handle the error case (not a valid response)
+            const errorRes = await resp.json();
+            console.error("API error:", errorRes.error.message);
+            return { status: false, error: errorRes.error.message };
         }
     } catch (error) {
-        console.log("Error getting users id", error)
-        return {value: false}
+        console.error("Error getting user's ID:", error);
+        return { status: false, error: error.message };
     }
-
 }
