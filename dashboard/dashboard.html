@@ -6,28 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./dashboard.css">
     <title>Dashboard Quantum Visionaries</title>
-    <!-- check for a valid idToken in local storage before content load-->
-    <script type="module">
-        import { checkTokenValidity } from "../src/validateToken.js";
-        // check if token is avlailable and valid 
-        const isTokenValid = async function () {
-            const token = localStorage.getItem("authToken")
-            if (token) {
-                const isValid = await checkTokenValidity(token);
-                if (!isValid.status) {
-                    redirectTologin()
-                }
-            }
-            else {
-                console.log("no token")
-                redirectTologin()
-            }
-        }
-        window.addEventListener("load", isTokenValid)
-        function redirectTologin() {
-            window.location.href = `./../signIn/signIn.html`
-        }
-    </script>
 </head>
 
 <body>
