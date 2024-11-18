@@ -45,7 +45,7 @@ function startInteraction(e) {
     isDrawing = true;
     startX = offsetX;
     startY = offsetY;
-
+    ctx.strokeStyle = color
     // Initialize drawing paths or handle mode-specific actions
     if (mode === 'pen' || mode === 'erase') {
         ctx.beginPath();
@@ -612,24 +612,26 @@ function toggleColorOptions(event) {
 }
 
 // Function to set the background color when an option is selected
-function setBackgroundColor(color) {
-    backgroundColor = color;
-    if (color === "#ffffff") {
-        console.log(color, "setbackground")
-        canvas.style.backgroundColor = color;
+function setBackgroundColor(clr) {
+    backgroundColor = clr;
+    if (clr === "#ffffff") {
+        document.getElementById("colorPicker").value = "#000000";
+        canvas.style.backgroundColor = backgroundColor;
         const savedData = saveCanvas();// Retrieve saved data
         // clearCanvas()
         if (savedData) {
             redrawCanvas(savedData, "#000000"); // Redraw with black color
+            // redrawCanvas()
         }
     }
     else {
-        canvas.style.backgroundColor = color;
-        console.log(color, "setbackground")
+        canvas.style.backgroundColor = backgroundColor;
+        document.getElementById("colorPicker").value = "#ffffff";
         const savedData = saveCanvas();// Retrieve saved data
         // clearCanvas()
         if (savedData) {
             redrawCanvas(savedData, "#ffffff"); // Redraw with black color
+            // redrawCanvas()
         }
     }
 }
