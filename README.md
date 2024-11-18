@@ -24,10 +24,7 @@ Quantum-Visionaries_002
     └───whiteboard
 
 ## Video Walkthrough of the Project  
-(Attach a very short video walkthrough of all the features, 1-3 minutes)  
-
-## Video Walkthrough of the Codebase  
-(Attach a very short video walkthrough of the codebase, 1-5 minutes)  
+https://youtu.be/DHjQuKAhZvk?si=ssvC29t_7ijjfg97
 
 ## Features  
 - **User Authentication**: Secure sign-up and login functionality.  
@@ -42,4 +39,15 @@ Quantum-Visionaries_002
 ## Installation & Getting Started  
 1. Clone the repository:  
    ```bash  
-   git clone https://github.com/Sharwan-Kumar-29/Quantum-Visionaries_002.git  
+   git clone https://github.com/Sharwan-Kumar-29/Quantum-Visionaries_002.git
+
+
+   
+![Screenshot 2024-11-18 004345](https://github.com/user-attachments/assets/bb6964d0-bae0-426f-ba22-661117104dad)
+![Screenshot 2024-11-18 004432](https://github.com/user-attachments/assets/3fa4eef7-1d3e-4a95-b592-f84c4e736a49)
+![Screenshot 2024-11-18 004452](https://github.com/user-attachments/assets/8643c666-9a8f-446d-bf79-fd26b58d3e48)
+![Screensho![Screenshot 2024-11-18 004924](https://github.com/user-attachments/a![Screenshot 2024-11-18 004804](https://github.com/user-attachments/assets/dea325f1-248c-4d67-91b8-ddc5f45d97f6)
+ssets/2183c38d-c6d4-4355-8068-588c6c6bbac3)
+t 2024-11-18 004527](https://github.com/user-attachments/assets/2de21d4c-f844-4242-8fd8-b701e44cc3fa)
+![Screenshot 2024-11-18 004924](https://github.com/user-attachments/assets/7e18d2c3-1a36-480c-80a3-75ecfd37246e)
+![Screenshot 2024-11-18 004804](https://github.com/user-attachments/assets/b5c4bf90-f005-4b76-9a2c-9c406095221b)
