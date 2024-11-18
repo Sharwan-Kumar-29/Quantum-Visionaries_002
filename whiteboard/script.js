@@ -9,9 +9,14 @@ const ctx = canvas.getContext("2d");
 const notes = document.getElementById("notes");
 const toolbar = document.getElementById("toolbar");
 //canvas width and height
-canvas.width = 1100;
-canvas.height = 700;
+// canvas.width = 1000;
+// canvas.height = 900;
 // canvas.height = 800
+
+// const rect = canvas.getBoundingClientRect();
+canvas.width = canvas.parentNode.offsetWidth;
+canvas.height = canvas.parentNode.offsetHeight;
+
 
 notes.style.display = "none";
 let isDrawing = false;
@@ -41,7 +46,10 @@ canvas.addEventListener("click", addTextOnCanvas);
 
 // Starts drawing
 function startInteraction(e) {
-    const { offsetX, offsetY } = e;
+    // const { offsetX, offsetY } = e;
+    const rect = canvas.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left; // Adjust for canvas position
+    const offsetY = e.clientY - rect.top;
     isDrawing = true;
     startX = offsetX;
     startY = offsetY;
