@@ -102,14 +102,13 @@ h3{
     padding: 15px;
     width: 90%;
     border: 1pf solid black;
-
 }
 canvas {
-    width: 100%;
+    width: 73%;
     /* height: 100%; */
     border: 1px solid #8a8686;
     cursor: crosshair;
-    /* margin: 10px; */
+    margin: 10px;
 }
 
 .resize-handle {
@@ -394,16 +393,16 @@ body.night-mode .theme-toggle {
     
     }
     canvas {
-        width: 100%;
+        width: 73%;
         cursor: crosshair;
         margin: 10px;
         height: 100vh;
     }
     /* Adjust canvas and notes area to avoid overlapping */
     .container {
-        width: 80%;
-        margin: auto;
-        /* margin-left: 60px; Add space for the toolbar */
+        width: 100%;
+        /* margin: auto; */
+         margin-left: 60px;/* Add space for the toolbar */
     }
 
 }
@@ -455,17 +454,17 @@ body.night-mode .theme-toggle {
     
     }
     canvas {
-        width: 100%;
+        width: 73%;
         cursor: crosshair;
         margin: 10px;
         height: 100vh;
     }
     /* Adjust canvas and notes area to avoid overlapping */
     .container {
-        width: 100%;
+        /* width: 100%; */
         margin: auto;
         /* margin-left: 50px; */
-        /* margin-left: 60px; Add space for the toolbar */
+        margin-left: 60px;/*  Add space for the toolbar */
     }
 
 }

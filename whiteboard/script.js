@@ -45,7 +45,7 @@ function startInteraction(e) {
     isDrawing = true;
     startX = offsetX;
     startY = offsetY;
-    
+
     // Initialize drawing paths or handle mode-specific actions
     if (mode === 'pen' || mode === 'erase') {
         ctx.beginPath();
@@ -93,21 +93,21 @@ function interact(e) {
         ctx.lineWidth = brushSize;
         ctx.lineCap = "round";
         ctx.strokeStyle = document.getElementById("colorPicker").value;
-        
+
         ctx.lineTo(offsetX, offsetY);
         ctx.stroke();
-        
+
         // Save drawing path for pen tool
         drawingData[drawingData.length - 1].path.push({ x: offsetX, y: offsetY });
     } else if (mode === 'erase') {
         ctx.lineWidth = brushSize;
         ctx.lineCap = "round";
         ctx.strokeStyle = "#ffffff"; // Erase with white color
-        if(document.body.classList.contains("night-mode")){
+        if (document.body.classList.contains("night-mode")) {
             ctx.strokeStyle = "#000"
             console.log("yes")
         }
-        else{
+        else {
             console.log("no")
         }
         ctx.lineTo(offsetX, offsetY);
@@ -370,7 +370,7 @@ function saveTextToCanvas(textArea, x, y) {
 }
 
 function clearCanvas() {
-    console.log("eho")
+    // console.log("eho")
     // Clear only the canvas area where drawings are made
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // // Fill with the background color
@@ -614,11 +614,24 @@ function toggleColorOptions(event) {
 // Function to set the background color when an option is selected
 function setBackgroundColor(color) {
     backgroundColor = color;
-    canvas.style.backgroundColor = backgroundColor;
-    clearCanvas();
-
-    // Hide the color options after selection
-    document.getElementById("colorOptions").style.display = "none";
+    if (color === "#ffffff") {
+        console.log(color, "setbackground")
+        canvas.style.backgroundColor = color;
+        const savedData = saveCanvas();// Retrieve saved data
+        // clearCanvas()
+        if (savedData) {
+            redrawCanvas(savedData, "#000000"); // Redraw with black color
+        }
+    }
+    else {
+        canvas.style.backgroundColor = color;
+        console.log(color, "setbackground")
+        const savedData = saveCanvas();// Retrieve saved data
+        // clearCanvas()
+        if (savedData) {
+            redrawCanvas(savedData, "#ffffff"); // Redraw with black color
+        }
+    }
 }
 
 // Function to close the color options when clicking outside
@@ -693,3 +706,79 @@ window.onload = () => {
 
 // load data of previous white board
 
+
+
+
+// Function to save the current canvas as a base64 image (drawing + text)
+function saveCanvas() {
+    const canvas = document.getElementById("whiteboard");
+    const drawingData = canvas.toDataURL("image/png"); // Save canvas content as base64 PNG
+    const notes = document.getElementById("notes").value; // Save any text/notes
+    const backgroundColor = canvas.style.backgroundColor; // Get current background color
+    const images = getAdditionalImages(); // (Optional) Retrieve any images if they're on the canvas
+
+    return { drawingData, notes, backgroundColor, images };
+}
+
+// Function to get additional images on the canvas (if any)
+function getAdditionalImages() {
+    // Assuming you have some logic to retrieve images on the canvas, for example:
+    // Return an array of images with their positions and sizes
+    return [];
+}
+
+// Function to load the saved canvas data (redraw it with black or white color)
+function redrawCanvas(savedData, color) {
+    const canvas = document.getElementById("whiteboard");
+    const ctx = canvas.getContext("2d");
+
+    // console.log(ctx.strokeStyle, color)
+    // console.log(ctx.stroke)
+    ctx.strokeStyle = color;
+    // console.log(ctx.strokeStyle, color)
+
+    // Set the background color (use the saved background color or the new color)
+    // canvas.style.backgroundColor = color;
+
+    // Redraw the saved drawing image
+    const img = new Image();
+    img.onload = () => {
+        ctx.drawImage(img, 0, 0); // Draw saved image (from drawingData)
+    };
+    img.src = savedData.drawingData; // `drawingData` is the base64 PNG
+
+    // Set the notes text (if there were any)
+    document.getElementById("notes").value = savedData.notes || "";
+
+    // You can add any additional images again if needed
+    if (savedData.images && savedData.images.length > 0) {
+        savedData.images.forEach(({ image, x, y, width, height }) => {
+            const imgElem = new Image();
+            imgElem.onload = () => ctx.drawImage(imgElem, x, y, width, height);
+            imgElem.src = image;
+        });
+    }
+}
+
+// Function to clear the canvas
+// function clearCanvas() {
+//     const canvas = document.getElementById("whiteboard");
+//     const ctx = canvas.getContext("2d");
+//     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears the entire canvas
+// }
+
+// // Event listeners for saving and redrawing with black or white color
+// document.getElementById("saveButton").addEventListener("click", () => {
+//     const savedData = ; // Save the current canvas state
+//     localStorage.setItem('savedWhiteboard', JSON.stringify(savedData)); // Optionally store in localStorage
+// });
+
+// document.getElementById("blackButton").addEventListener("click", () => {
+// });
+
+// document.getElementById("whiteButton").addEventListener("click", () => {
+//     const savedData = saveCanvas();// Retrieve saved data
+//     if (savedData) {
+//         redrawCanvas(savedData, "white"); // Redraw with white color
+//     }
+// });
