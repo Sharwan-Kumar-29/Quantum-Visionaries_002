@@ -7,7 +7,7 @@
 Frontend  
 
 ## Deployed App  
-- **Frontend**: https://quantum-visionaries-002.netlify.app/
+- **Frontend**: https://quantum-visionaries-002.netlify.app
 - **Backend**: Not applicable  
 - **Database**: Firebase  
 

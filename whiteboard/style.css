@@ -82,10 +82,12 @@ font-size: 30px;
 
 }
 .container {
-    width: 100%;
+    width: 90%;
     display: flex;
     justify-content: center;
-    margin-top:1em;
+    align-items: center;
+    margin: auto;
+    margin-top: 1.5rem;
 }
 
 .saved-files{
@@ -103,10 +105,11 @@ h3{
 
 }
 canvas {
-    width: 73%;
+    width: 100%;
+    /* height: 100%; */
     border: 1px solid #8a8686;
     cursor: crosshair;
-    margin: 10px;
+    /* margin: 10px; */
 }
 
 .resize-handle {
@@ -292,7 +295,7 @@ input[type="file"] {
 
 /* General Styles for Theme Toggle Button */ 
 .theme-toggle {
-    position: absolute;
+    /* position: absolute; */
     right: 2em;
     width: 1.6em;
     height: 1.6em;
@@ -347,7 +350,7 @@ body.night-mode .theme-toggle {
 /* Media Query for Small Screens */
 @media (max-width: 768px) {
     .toolbar {
-        flex-direction: column; /* Stack items vertically */
+        /* flex-direction: column; Stack items vertically */
         position: absolute;
         left: 0; /* Align toolbar to the left side */
         top: 0; /* Start from the top */
@@ -391,14 +394,16 @@ body.night-mode .theme-toggle {
     
     }
     canvas {
-        width: 73%;
+        width: 100%;
         cursor: crosshair;
         margin: 10px;
         height: 100vh;
     }
     /* Adjust canvas and notes area to avoid overlapping */
     .container {
-        margin-left: 60px; /* Add space for the toolbar */
+        width: 80%;
+        margin: auto;
+        /* margin-left: 60px; Add space for the toolbar */
     }
 
 }
@@ -406,7 +411,7 @@ body.night-mode .theme-toggle {
 /* Media Query for Small Screens */
 @media (max-width: 1000px) {
     .toolbar {
-        flex-direction: column; /* Stack items vertically */
+        /* flex-direction: column; Stack items vertically */
         position: absolute;
         left: 0; /* Align toolbar to the left side */
         top: 0; /* Start from the top */
@@ -430,9 +435,9 @@ body.night-mode .theme-toggle {
     .theme-toggle{
         width: 20px;
         height: 20px; 
-        position: absolute;
-        top: 13px;  
-        left: 28px;   
+        /* position: absolute; */
+        /* top: 13px;   */
+        /* left: 28px;    */
     }
 
     #colorPicker{
@@ -450,15 +455,34 @@ body.night-mode .theme-toggle {
     
     }
     canvas {
-        width: 73%;
+        width: 100%;
         cursor: crosshair;
         margin: 10px;
         height: 100vh;
     }
     /* Adjust canvas and notes area to avoid overlapping */
     .container {
-        margin-left: 60px; /* Add space for the toolbar */
+        width: 100%;
+        margin: auto;
+        /* margin-left: 50px; */
+        /* margin-left: 60px; Add space for the toolbar */
     }
 
 }
 
+
+
+/* dashboard link text  */
+#dashboard-link{
+    display: block;
+    text-decoration: none;
+    font-size: 28px;
+    background: linear-gradient(90deg, rgba(241, 100, 31, 1) 0%, rgba(246, 125, 36, 1) 32%, rgba(248, 152, 42, 1) 64%, rgba(255, 200, 45, 1) 100%);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* position: absolute; */
+    /* top: 20px; */
+    /* left: 25px; */
+}

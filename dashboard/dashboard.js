@@ -7,16 +7,20 @@ let userId;
 // get user id from google authentication api request 
 async function getUserData() {
     const token = localStorage.getItem("authToken")
-    const res = await getUserId(token)
-    if (res.status) {
-        userId = res.userId;
-        fetchWhiteboards(userId)
-        fetchUserData(userId)
+    if (token) {
+        const res = await getUserId(token)
+        if (res.status) {
+            userId = res.userId;
+            fetchWhiteboards(userId)
+            fetchUserData(userId)
+        }
+        else {
+            console.error("Invalid session login again")
+            window.location.href = "./../signIn/singIn.html"
+        }
+    } else {
+        window.location.href = "./../signIn/singIn.html"
     }
-    else {
-        console.error("Invalid session login again")
-    }
-
 }
 // get user data and fetch whiteboards
 getUserData()
@@ -89,13 +93,13 @@ function displayRecentWhiteboards(whiteboards) {
 
             deleteIconDiv.innerHTML = `<img src="./../src/Assets/images/trash.png">`
 
-            newDiv.append(imgDiv, details,deleteIconDiv)
+            newDiv.append(imgDiv, details, deleteIconDiv)
             newDiv.classList.add("recent-whiteboards-cards")
 
-            deleteIconDiv.addEventListener("click", (event)=>{
+            deleteIconDiv.addEventListener("click", (event) => {
                 event.stopPropagation()
                 const value = confirm(`Do you want to delete the whiteboard, this is permanent and can't be undone`)
-                if(value){
+                if (value) {
                     deleteWhiteboard(whiteboard);
                 }
             })
@@ -105,10 +109,10 @@ function displayRecentWhiteboards(whiteboards) {
                 window.location.href = `./../whiteboard/home.html?u=${userId}&ep=${whiteboard}`
             })
 
-            newDiv.addEventListener("mouseenter",()=>{
+            newDiv.addEventListener("mouseenter", () => {
                 deleteIconDiv.style.display = "block"
             })
-            newDiv.addEventListener("mouseleave",()=>{
+            newDiv.addEventListener("mouseleave", () => {
                 deleteIconDiv.style.display = "none"
             })
 
@@ -123,31 +127,31 @@ function displayRecentWhiteboards(whiteboards) {
 
 
 // delete whiteboard 
-async function deleteWhiteboard(whiteboard){
-    whiteboards = Object.keys(whiteboards).filter(key => key!==whiteboard).reduce((acc, key)=>{
+async function deleteWhiteboard(whiteboard) {
+    whiteboards = Object.keys(whiteboards).filter(key => key !== whiteboard).reduce((acc, key) => {
         acc[key] = whiteboards[key];
         return acc;
-    },{})
+    }, {})
 
     // deleteWhiteboard from firebase 
     const URL = `https://quantum-visionaries-002-default-rtdb.firebaseio.com/users/${userId}/whiteboards/${whiteboard}.json`
 
     const requestOptions = {
-        method : "DELETE",
+        method: "DELETE",
         redirect: "follow"
     }
 
-    try{
+    try {
         let resp = await fetch(URL, requestOptions)
-        if(resp.ok){
+        if (resp.ok) {
             displayRecentWhiteboards(whiteboards)
         }
-        else{
+        else {
             let err = await resp.json()
             alert(err.error.message)
         }
     }
-    catch(err){
+    catch (err) {
         console.log(err)
         alert(err.error.message)
     }
@@ -155,27 +159,27 @@ async function deleteWhiteboard(whiteboard){
 }
 
 // fetch and append user data 
-async function fetchUserData(userId){
+async function fetchUserData(userId) {
     const URL = `https://quantum-visionaries-002-default-rtdb.firebaseio.com/users/${userId}.json`
-    try{
+    try {
         let resp = await fetch(URL)
-        if(resp.ok){
+        if (resp.ok) {
             let data = await resp.json()
             appendUserDate(data)
         }
-        else{
+        else {
             let err = await resp.json()
             console.log(err.error.message)
         }
     }
-    catch(err){
+    catch (err) {
         console.log(err)
         alert(err.error.message)
     }
 
 }
 
-function appendUserDate(data){
+function appendUserDate(data) {
     let profileDiv = document.getElementById("user-details")
 
     profileDiv.innerHTML = `
@@ -215,7 +219,7 @@ window.addEventListener("resize", () => {
 
 
 // close side navbar 
-document.getElementById("close-side-bar").addEventListener("click", ()=>{
+document.getElementById("close-side-bar").addEventListener("click", () => {
     document.getElementById("side-nav").style.display = "none"
 })
 
@@ -283,12 +287,12 @@ function redirectToNewWhiteBoard(whiteboardName) {
 
 
 // display profile
-function displayProfile(){
+function displayProfile() {
     let profileDiv = document.getElementById("user-profile")
-    if(profileDiv.style.display === "none"){
+    if (profileDiv.style.display === "none") {
         profileDiv.style.display = "block"
     }
-    else{
+    else {
         profileDiv.style.display = "none"
     }
 }
@@ -342,12 +346,12 @@ const searchRecentWhiteboards = function (whiteboardContainer) {
     if (whiteboardContainer) {
         const container = {}
         for (let whiteboard in whiteboardContainer) {
-            if(whiteboard.includes(searchedText))
+            if (whiteboard.includes(searchedText))
                 container[whiteboard] = whiteboardContainer[whiteboard]
         }
         displayRecentWhiteboards(container)
     }
-    else{
+    else {
         return
     }
 }
@@ -367,25 +371,25 @@ sortWhiteboards.addEventListener("change", sortRecentWhiteboards)
 // Sort recent whiteboards
 function sortRecentWhiteboards() {
     const sortBy = sortWhiteboards.value;
-    let copyWhiteboard = {...whiteboards}
+    let copyWhiteboard = { ...whiteboards }
 
     if (sortBy === "name-asc") {
         copyWhiteboard = Object.keys(copyWhiteboard).sort().reduce((obj, key) => {
-                obj[key] = copyWhiteboard[key];
-                return obj;
-            }, {});
+            obj[key] = copyWhiteboard[key];
+            return obj;
+        }, {});
     } else if (sortBy === "name-desc") {
         // Sort by name in descending order
         copyWhiteboard = Object.keys(copyWhiteboard).sort().reverse().reduce((obj, key) => {
-                obj[key] = copyWhiteboard[key];
-                return obj;
-            }, {});
+            obj[key] = copyWhiteboard[key];
+            return obj;
+        }, {});
     } else if (sortBy === "date-asc") {
         // Sort by date created in ascending order
         copyWhiteboard = Object.keys(copyWhiteboard).sort((a, b) => new Date(copyWhiteboard[a].timestamp) - new Date(copyWhiteboard[b].timestamp)).reduce((obj, key) => {
-                obj[key] = copyWhiteboard[key];
-                return obj;
-            }, {});
+            obj[key] = copyWhiteboard[key];
+            return obj;
+        }, {});
     } else if (sortBy === "date-desc") {
         // Sort by date created in descending order
         copyWhiteboard = Object.keys(copyWhiteboard).sort((a, b) => new Date(copyWhiteboard[b].timestamp) - new Date(copyWhiteboard[a].timestamp))
@@ -394,11 +398,11 @@ function sortRecentWhiteboards() {
                 return obj;
             }, {});
     }
-    if(searchInput.value === ""){
+    if (searchInput.value === "") {
         // Display the sorted whiteboards
         displayRecentWhiteboards(copyWhiteboard);
     }
-    else{
+    else {
         // first search and then display 
         searchRecentWhiteboards(copyWhiteboard)
     }

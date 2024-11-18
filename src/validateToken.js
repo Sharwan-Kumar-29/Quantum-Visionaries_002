@@ -16,7 +16,7 @@ export async function checkTokenValidity(token) {
         if (resp.ok) {
             let res = await resp.json()
             // token valid, redirect to dashboard
-            return {status: true, userData: res.users[0]}
+            return {status: true}
         }
         else {
             // Invalid token (expired)

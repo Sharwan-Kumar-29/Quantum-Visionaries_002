@@ -10,7 +10,8 @@ const notes = document.getElementById("notes");
 const toolbar = document.getElementById("toolbar");
 //canvas width and height
 canvas.width = 1100;
-canvas.height = 800;
+canvas.height = 700;
+// canvas.height = 800
 
 notes.style.display = "none";
 let isDrawing = false;
@@ -44,9 +45,9 @@ function startInteraction(e) {
     isDrawing = true;
     startX = offsetX;
     startY = offsetY;
-
+    
     // Initialize drawing paths or handle mode-specific actions
-    if (mode === 'pen' || mode === 'eraser') {
+    if (mode === 'pen' || mode === 'erase') {
         ctx.beginPath();
         ctx.moveTo(offsetX, offsetY);
         if (mode === 'pen') {
@@ -70,7 +71,7 @@ function startInteraction(e) {
 function stopInteraction() {
     isDrawing = false;
 
-    if (mode === 'pen' || mode === 'eraser') {
+    if (mode === 'pen' || mode === 'erase') {
         ctx.closePath();
     } else if (mode === 'line' || mode === 'circle' || mode === 'rectangle' || mode === 'ellipse' || mode === 'diamond' || mode === 'parallelogram' || mode === 'triangle') {
         drawShape();
@@ -87,19 +88,28 @@ function interact(e) {
 
     const { offsetX, offsetY } = e;
 
+    // const { offsetX, offsetY } = e;
     if (mode === 'pen') {
         ctx.lineWidth = brushSize;
         ctx.lineCap = "round";
-        ctx.strokeStyle = color;
+        ctx.strokeStyle = document.getElementById("colorPicker").value;
+        
         ctx.lineTo(offsetX, offsetY);
         ctx.stroke();
-
+        
         // Save drawing path for pen tool
         drawingData[drawingData.length - 1].path.push({ x: offsetX, y: offsetY });
-    } else if (mode === 'eraser') {
+    } else if (mode === 'erase') {
         ctx.lineWidth = brushSize;
         ctx.lineCap = "round";
         ctx.strokeStyle = "#ffffff"; // Erase with white color
+        if(document.body.classList.contains("night-mode")){
+            ctx.strokeStyle = "#000"
+            console.log("yes")
+        }
+        else{
+            console.log("no")
+        }
         ctx.lineTo(offsetX, offsetY);
         ctx.stroke();
     } else if (isDragging) {
@@ -122,7 +132,7 @@ function interact(e) {
 function setMode(selectedMode) {
     mode = selectedMode;
     isTextMode = mode === "text";
-    if (mode === "eraser") {
+    if (mode === "erase") {
         color = "#ffffff";  // Change to white for eraser
         ctx.lineWidth = brushSize;  // Ensure brush size is applied for eraser
     }
@@ -145,9 +155,8 @@ function toggleSlider() {
 // Sets the brush size
 function setBrushSize(size) {
     brushSize = size;
-    console.log(size);
 
-    if (mode === "eraser") {
+    if (mode === "erase") {
         ctx.lineWidth = brushSize;  // Ensure the brush size is set when erasing
     }
 }
@@ -361,9 +370,10 @@ function saveTextToCanvas(textArea, x, y) {
 }
 
 function clearCanvas() {
+    console.log("eho")
     // Clear only the canvas area where drawings are made
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Fill with the background color
+    // // Fill with the background color
     ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     undoStack = [];
@@ -405,16 +415,6 @@ function redo() {
         undoStack.push(redoState);
         restoreCanvasState(redoState);
     }
-}
-
-// Restores the canvas state from a saved data URL
-function restoreCanvasState(state) {
-    const img = new Image();
-    img.src = state;
-    img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0);
-    };
 }
 
 // Redraw the canvas and draw the paths and image
@@ -622,15 +622,15 @@ function setBackgroundColor(color) {
 }
 
 // Function to close the color options when clicking outside
-document.addEventListener('click', function (event) {
-    const colorOptions = document.getElementById("colorOptions");
-    const button = document.getElementById("backgroundButton");
+// document.addEventListener('click', function (event) {
+//     const colorOptions = document.getElementById("colorOptions");
+//     const button = document.getElementById("backgroundButton");
 
-    // If the click is outside the color options or button, hide the color options
-    if (!colorOptions.contains(event.target) && event.target !== button) {
-        colorOptions.style.display = "none";
-    }
-});
+//     // If the click is outside the color options or button, hide the color options
+//     if (!colorOptions.contains(event.target) && event.target !== button) {
+//         colorOptions.style.display = "none";
+//     }
+// });
 
 
 // download file code
@@ -675,9 +675,11 @@ function toggleTheme() {
     if (body.classList.contains("night-mode")) {
         themeIcon.classList.remove("fa-sun");
         themeIcon.classList.add("fa-moon");
+        setBackgroundColor("#000000")
     } else {
         themeIcon.classList.remove("fa-moon");
         themeIcon.classList.add("fa-sun");
+        setBackgroundColor("#ffffff")
     }
 }
 

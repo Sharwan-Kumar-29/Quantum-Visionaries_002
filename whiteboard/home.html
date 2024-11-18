@@ -34,7 +34,7 @@
 
 <body>
     <div class="toolbar">
-
+        <a href="./../dashboard/dashboard.html" id="dashboard-link">Dashboard</a>
         <!-- Toolbar with drawing options and controls -->
         <button data-tooltip="Pen" onclick="setMode('pen')"><i class="fi fi-ts-drawer-alt"></i></button>
         <button data-tooltip="Line" onclick="setMode('line')"><i class="fi fi-bs-slash"></i></button>
@@ -55,17 +55,18 @@
         <button data-tooltip="Redo" onclick="redo()"><i class="fi fi-br-redo-alt"></i></button>
 
         <!-- Background Color Change Button with Arrow -->
-        <button id="backgroundButton" data-tooltip="background" onclick="toggleColorOptions(event)">
+        <!-- <button id="backgroundButton" data-tooltip="background" onclick="toggleColorOptions(event)">
             <span><i class="fi fi-ss-background"></i></span>
-        </button>
+        </button> -->
         <!-- Background Color Options -->
-        <div class="color-options" id="colorOptions" style="display: none;">
+        <!-- <div class="color-options" id="colorOptions" style="display: none;">
             <button onclick="setBackgroundColor('#ffffff')">White</button>
             <button onclick="setBackgroundColor('#000000')">Black</button>
-        </div>
+        </div> -->
 
         <button data-tooltip="Save to firebase" onclick="saveToFirebase()"><i
                 class="fa-solid fa-cloud-arrow-up"></i></button>
+        
         <input type="color" class="colorPicker" id="colorPicker" onchange="setColor(this.value)">
         <!-- Button to toggle slider visibility -->
         <button id="toggleSliderButton" onclick="toggleSlider()"><span
@@ -99,10 +100,10 @@
         <canvas id="whiteboard"></canvas>
         <textarea id="notes" placeholder="Write your notes here..."></textarea>
     </div>
-    <script src="script.js"></script>
 </body>
 
 </html>
+<script src="script.js"></script>
 <script>
     // home.js or inside a <script> tag in home.html
     window.addEventListener("DOMContentLoaded", () => {
@@ -149,7 +150,7 @@
         // Load the drawing data
         const img = new Image();
         img.onload = () => {
-            clearCanvas(ctx);
+            clearCanvas();
             ctx.drawImage(img, 0, 0); // Redraw saved image
         };
         img.src = drawingData;
@@ -171,8 +172,8 @@
     }
 
     // Clear canvas utility
-    function clearCanvas(ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
+    // function clearCanvas(ctx) {
+    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // }
 
 </script>
