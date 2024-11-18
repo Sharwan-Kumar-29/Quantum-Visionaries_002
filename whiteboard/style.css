@@ -184,13 +184,18 @@ Style for the dropdown button (showing the arrow)
     transform: translateY(-50%);
     pointer-events: none;
 } */
+.download-container{
+    position: relative;
+    /* border: 1px solid black; */
+}
+
 
 /* Hide the download options initially */
 .download-options {
     display: none;
     position: absolute;
-    top: 70px;
-    right: 10em;
+    top: 50px;
+    /* right: 0px; */
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 6em;

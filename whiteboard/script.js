@@ -592,48 +592,37 @@ function toggleColorDropdown() {
 }
 
 // Function to set the background color
-// Function to toggle the visibility of the color options below the background button
-function toggleColorOptions(event) {
-    const colorOptions = document.getElementById("colorOptions");
+// // Function to toggle the visibility of the color options below the background button
+// function toggleColorOptions(event) {
+//     const colorOptions = document.getElementById("colorOptions");
 
-    // Show or hide the color options
-    colorOptions.style.display = (colorOptions.style.display === "none" || colorOptions.style.display === "") ? "block" : "none";
+//     // Show or hide the color options
+//     colorOptions.style.display = (colorOptions.style.display === "none" || colorOptions.style.display === "") ? "block" : "none";
 
-    // Position the color options directly below the button
-    if (colorOptions.style.display === "block") {
-        const button = document.getElementById("backgroundButton");
-        const rect = button.getBoundingClientRect();
-        colorOptions.style.left = `${rect.left}px`;
-        colorOptions.style.top = `${rect.bottom + window.scrollY}px`;
-    }
+//     // Position the color options directly below the button
+//     if (colorOptions.style.display === "block") {
+//         const button = document.getElementById("backgroundButton");
+//         const rect = button.getBoundingClientRect();
+//         colorOptions.style.left = `${rect.left}px`;
+//         colorOptions.style.top = `${rect.bottom + window.scrollY}px`;
+//     }
 
-    // Prevent the event from propagating so it doesn't trigger the document click listener
-    event.stopPropagation();
-}
+//     // Prevent the event from propagating so it doesn't trigger the document click listener
+//     event.stopPropagation();
+// }
+
 
 // Function to set the background color when an option is selected
 function setBackgroundColor(clr) {
     backgroundColor = clr;
     if (clr === "#ffffff") {
         document.getElementById("colorPicker").value = "#000000";
-        canvas.style.backgroundColor = backgroundColor;
-        const savedData = saveCanvas();// Retrieve saved data
-        // clearCanvas()
-        if (savedData) {
-            redrawCanvas(savedData, "#000000"); // Redraw with black color
-            // redrawCanvas()
-        }
     }
     else {
-        canvas.style.backgroundColor = backgroundColor;
         document.getElementById("colorPicker").value = "#ffffff";
-        const savedData = saveCanvas();// Retrieve saved data
-        // clearCanvas()
-        if (savedData) {
-            redrawCanvas(savedData, "#ffffff"); // Redraw with black color
-            // redrawCanvas()
-        }
     }
+    clearCanvas()
+    canvas.style.backgroundColor = backgroundColor;
 }
 
 // Function to close the color options when clicking outside
@@ -722,45 +711,39 @@ function saveCanvas() {
     return { drawingData, notes, backgroundColor, images };
 }
 
-// Function to get additional images on the canvas (if any)
-function getAdditionalImages() {
-    // Assuming you have some logic to retrieve images on the canvas, for example:
-    // Return an array of images with their positions and sizes
-    return [];
-}
 
-// Function to load the saved canvas data (redraw it with black or white color)
-function redrawCanvas(savedData, color) {
-    const canvas = document.getElementById("whiteboard");
-    const ctx = canvas.getContext("2d");
+// // Function to load the saved canvas data
+// function redrawCanvas(savedData, color) {
+//     const canvas = document.getElementById("whiteboard");
+//     const ctx = canvas.getContext("2d");
 
-    // console.log(ctx.strokeStyle, color)
-    // console.log(ctx.stroke)
-    ctx.strokeStyle = color;
-    // console.log(ctx.strokeStyle, color)
+//     // console.log(ctx.strokeStyle, color)
+//     // console.log(ctx.stroke)
+//     ctx.strokeStyle = color;
+//     // console.log(ctx.strokeStyle, color)
 
-    // Set the background color (use the saved background color or the new color)
-    // canvas.style.backgroundColor = color;
+//     // Set the background color (use the saved background color or the new color)
+//     // canvas.style.backgroundColor = color;
 
-    // Redraw the saved drawing image
-    const img = new Image();
-    img.onload = () => {
-        ctx.drawImage(img, 0, 0); // Draw saved image (from drawingData)
-    };
-    img.src = savedData.drawingData; // `drawingData` is the base64 PNG
+//     // Redraw the saved drawing image
+//     const img = new Image();
+//     img.onload = () => {
+//         ctx.drawImage(img, 0, 0); // Draw saved image (from drawingData)
+//     };
+//     img.src = savedData.drawingData; // `drawingData` is the base64 PNG
 
-    // Set the notes text (if there were any)
-    document.getElementById("notes").value = savedData.notes || "";
+//     // Set the notes text (if there were any)
+//     document.getElementById("notes").value = savedData.notes || "";
 
-    // You can add any additional images again if needed
-    if (savedData.images && savedData.images.length > 0) {
-        savedData.images.forEach(({ image, x, y, width, height }) => {
-            const imgElem = new Image();
-            imgElem.onload = () => ctx.drawImage(imgElem, x, y, width, height);
-            imgElem.src = image;
-        });
-    }
-}
+//     // You can add any additional images again if needed
+//     if (savedData.images && savedData.images.length > 0) {
+//         savedData.images.forEach(({ image, x, y, width, height }) => {
+//             const imgElem = new Image();
+//             imgElem.onload = () => ctx.drawImage(imgElem, x, y, width, height);
+//             imgElem.src = image;
+//         });
+//     }
+// }
 
 // Function to clear the canvas
 // function clearCanvas() {

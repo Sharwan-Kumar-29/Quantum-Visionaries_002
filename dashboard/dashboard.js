@@ -261,22 +261,32 @@ function validateWhiteboardName() {
 
     const newWhiteboard = nameInput.value.trim()
 
-    // check if whiteboard name already used 
-    if (whiteboards) {
-        for (let whiteboard in whiteboards) {
-            if (whiteboard === newWhiteboard) {
-                let nameMessage = document.getElementById("project-name-taken-message")
-                nameMessage.style.display = "block"
+    if (newWhiteboard.length < 1) {
+        let nameMessage = document.getElementById("project-name-invalid-message")
+        nameMessage.style.display = "block"
 
-                nameInput.oninput = function () {
-                    nameMessage.style.display = "none"
-                }
-                return
-            }
+        nameInput.oninput = function () {
+            nameMessage.style.display = "none"
         }
     }
-    nameInput.value = ""
-    redirectToNewWhiteBoard(newWhiteboard)
+    else {
+        // check if whiteboard name already used 
+        if (whiteboards) {
+            for (let whiteboard in whiteboards) {
+                if (whiteboard === newWhiteboard) {
+                    let nameMessage = document.getElementById("project-name-taken-message")
+                    nameMessage.style.display = "block"
+
+                    nameInput.oninput = function () {
+                        nameMessage.style.display = "none"
+                    }
+                    return
+                }
+            }
+        }
+        nameInput.value = ""
+        redirectToNewWhiteBoard(newWhiteboard)
+    }
 }
 
 // redirect user to blank whiteboard
