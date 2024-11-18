@@ -150,7 +150,7 @@
         // Load the drawing data
         const img = new Image();
         img.onload = () => {
-            clearCanvas(ctx);
+            clearCanvas();
             ctx.drawImage(img, 0, 0); // Redraw saved image
         };
         img.src = drawingData;
@@ -172,8 +172,8 @@
     }
 
     // Clear canvas utility
-    function clearCanvas(ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
+    // function clearCanvas(ctx) {
+    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // }
 
 </script>
